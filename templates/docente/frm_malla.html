@@ -1,0 +1,49 @@
+{% extends "docente/docente.html" %}
+{% load static %}
+{% block titulo %}Sistema Homologacion{% endblock %}
+{% block content %}
+<style>
+    .embed-responsive {
+        position: relative;
+        display: block;
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+</style>
+<div class="card" style="margin-top: 6%">
+    <div class="card-header " style="background: #bbb">
+        <div class="" style="background: #e5e5e5">           
+            <center>
+                {{#if msg}}
+                {{#if  msg.error}}
+                <center>
+                    <label style="background: #FE2E2E">{{ msg.error}}</label>
+                </center>
+                {{/if}}
+                {{#if msg.info}}
+                <center>
+                    <label style="background: #04B431">{{ msg.info}}</label>
+                </center>
+                {{/if}}
+                {{/if}}
+                <a class="navbar-brand text-brand " href="#" style="font-size: 200%">{{Carrera.area}}</a>
+                <br>
+                <a class="navbar-brand text-brand" href="#" style="font-size: 150%">Carrera de {{Carrera.nombre}}</a>
+                <br>
+                <a class="navbar-brand text-brand" href="#" style="font-size: 100%">Malla <span class="color-b"> Curricular {{Malla.anio}}</span></a>
+                <br>
+                {{#if   Malla.estado}}
+                <td><a  class="btn btn-success "  href="#"  style="background: #26a356;width: 100%"><span class="glyphicon glyphicon-pencil">Activa</span></a>
+
+                    {{else}}
+                <td><a class="btn btn-success "  href="#"  style="background: #FE2E2E;width: 100%"><span class="glyphicon glyphicon-pencil">Inactiva</span></a>
+                    {{/if}}
+            </center>
+            <div class='embed-responsive' style='padding-bottom:70%'>
+                <object data='/upload/mallas/{{Malla.archivo}}' type='application/pdf' width='100%' height='100%'></object>
+            </div>
+        </div>
+    </div>  
+</div> 
+{% endblock %} 

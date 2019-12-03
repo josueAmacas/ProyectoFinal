@@ -1,0 +1,142 @@
+{% extends "decano/decano.html" %}
+{% load static %}
+{% block titulo %}Sistema Homologacion{% endblock %}
+{% block content %}
+<style>
+    .embed-responsive {
+        position: relative;
+        display: block;
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+</style>
+<script>
+
+    function PDF(txt, area, carrera, anio, estado) {
+        var html = '<center>';
+        html += '       <a class="navbar-brand text-brand " href="#" style="font-size: 150%">' + area + '</a>';
+        html += '        <br>';
+        html += '        <a class="navbar-brand text-brand" href="#" style="font-size: 100%">Carrera de ' + carrera + '</a>';
+        html += '        <br>';
+        html += '        <a class="navbar-brand text-brand" href="#" style="font-size: 90%">Malla <span class="color-b"> Curricular ' + anio + '</span></a>';
+        html += '        <br>';
+        if (estado === "true") {
+            html += '        <td><a  class="btn btn-success "  href="#"  style="background: #26a356;width: 100%"><span class="glyphicon glyphicon-pencil">Activa</span></a>';
+
+        } else {
+            html += '        <td><a class="btn btn-success "  href="#"  style="background: #FE2E2E;width: 100%"><span class="glyphicon glyphicon-pencil">Inactiva</span></a>';
+        }
+        html += '    </center>';
+        html += '    <div class="embed-responsive" style="padding-bottom:70%">';
+        html += '        <object data="/upload/mallas/' + txt + '" type="application/pdf" width="100%" height="100%"></object>';
+        html += '</div>';
+        $("#pdf").html(html);
+    }
+
+</script>
+
+<div class="card" >
+
+    <div class="card-header"  style="background: #bbb">
+
+
+        <div class="row">
+
+            <div class="container" style="margin-top: 3% "> 
+                <!-- Trigger the modal with a button -->
+                <div class="table-responsive" style="margin-top: 10%;background: #e5e5e5">           
+                    <center>
+                        {{#if msg}}
+                        {{#if  msg.error}}
+                        <center>
+                            <label style="background: #FE2E2E">{{ msg.error}}</label>
+                        </center>
+                        {{/if}}
+                        {{#if msg.info}}
+                        <center>
+                            <label style="background: #04B431">{{ msg.info}}</label>
+                        </center>
+                        {{/if}}
+                        {{/if}}
+                        <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Lista d<span class="color-b">e Mallas</span></a>
+                        <br>                           
+                    </center>
+                    <a onclick="" class="btn btn-success  "  href="#"  style="background: #FFC312;width: 100%" data-placement="top" data-toggle="modal" data-target="#Form"  ><span class="glyphicon glyphicon-pencil">Nueva Malla</span></a>
+                    <br>
+                    <table  class="table table-hover table-responsive" id="tabla" style="font-size: 100%">
+
+                        <thead class="color-b" style="font-size: 20px;text-align: center">                                         
+                        <th>Nro</th>
+                        <th>Area</th>
+                        <th>Anio</th>
+                        <th>Carrera</th>
+                        <th>Archivo</th>
+                        <th>Estado</th>
+                        </thead>
+
+                        <tbody style="text-align: center">
+                            {{#each this.Malla  as |Malla i|}}
+                            <tr>
+                                <td>{{i}}</td>
+
+                                <td>{{Malla.anio}}</td> 
+                                <td>{{Malla.carrera.area}}</td>
+                                <td>{{Malla.carrera.nombre}}</td> 
+
+                                <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>    
+                                {{#if  Malla.estado}}
+
+                                <td><a id="{{i}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Activa</span></a>
+
+                                    {{else}}
+                                <td><a id="{{i}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactiva</span></a>
+                                    {{/if}}
+                            </tr>
+
+                        <script>
+
+                            $("#b{{i}}").click(function () {
+                                PDF("{{Malla.archivo}}", "{{Malla.carrera.area}}", "{{Malla.carrera.nombre}}", "{{Malla.anio}}", "{{Malla.estado}}");
+                            });
+
+                        </script>
+
+                        {{/each}}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>  
+</div> 
+
+
+<!-- Modal Editar Estado -->
+<div id="PDF" class="  modal fade" role="dialog" style="">
+    <div class="">
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="card" >
+                <div class="card-header " style="background: #bbb">
+                    <a type="button" class="btn btn-danger col-md-12" href="/menu/malla">Cerrar</a>
+
+                    <div class="" style="background: #e5e5e5" id="pdf">           
+
+                    </div>
+                </div>  
+
+            </div> 
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

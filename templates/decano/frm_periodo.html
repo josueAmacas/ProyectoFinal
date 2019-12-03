@@ -1,0 +1,242 @@
+{% extends "decano/decano.html" %}
+{% load static %}
+{% block titulo %}Sistema Homologacion{% endblock %}
+{% block content %}
+<script>
+    $(function () {
+
+        $("#estado").validate({
+            rules: {
+                malla: {
+                    required: true
+                },
+                fecha_inicio: {
+                    required: true
+                },
+                fecha_fin: {
+                    required: true
+                }
+
+
+            }
+        });
+    });
+
+    function cargarMalla() {
+        $.ajax({
+            url: '/lista/periodo/malla/',
+            type: 'GET',
+            dataType: 'JSON',
+            success: function (data, textStatus, jqXHR) {
+
+                var html = "<option disabled selected>Selecciona una opción</option>";
+                $.each(data, function (i, item) {
+                    html += "<option value='" + item.external_id + "'>" + item.anio + "</option>";
+                });
+                $("#malla").html(html);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+    function borrar() {
+        $("#fecha_inicio").val("");
+        $("#fecha_fin").val("");
+        $("#malla").val("");
+        $("#external").val("0");
+    }
+    function PDF(txt) {
+        var html = '<div class="container "  >';
+        html += '<div class="embed-responsive  embed-responsive-4by3">';
+        html += ' <iframe class="embed-responsive-item " src="/upload/mallas/' + txt + '"  ></iframe>';
+        html += '</div>';
+        html += '</div>';
+        $("#pdf").html(html);
+    }
+
+    $(document).ready(function () {
+        cargarMalla();
+
+    });
+
+</script>
+
+<div class="card " >
+    <div class="card-header"  style="background: #bbb ">
+        <div class="row ">
+            <div class="container" style="margin-top: 9% ">
+                <div class="card"> 
+                    <!-- Trigger the modal with a button -->
+                    <div class="table-responsive" style="background: #e5e5e5">                 
+                        <center>
+                            {{#if msg}}
+                            {{#if  msg.error}}
+                            <center>
+                                <label style="background: #FE2E2E">{{ msg.error}}</label>
+                            </center>
+                            {{/if}}
+                            {{#if msg.info}}
+                            <center>
+                                <label style="background: #04B431">{{ msg.info}}</label>
+                            </center>
+                            {{/if}}
+                            {{/if}}
+
+                            <a class="navbar-brand text-brand" href="#" style="font-size: 200%">Lista de Per<span class="color-b">iodos Academicos</span></a>
+                            <br>
+                            <a onclick="borrar();" class="btn btn-success  "  href="#"  style="background: #FFC312;width: 100%" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Agregar Periodo Academico</span></a>
+                        </center>
+                        <table  class="table table-hover table-responsive" id="tabla" style="font-size: 100%">
+
+                            <thead class="color-b" style="text-align: center">                                         
+                            <th>Nro</th>
+                            <th>Fecha de Inicio</th>
+                            <th>Fecha Fin</th>
+                            <th>Año Malla</th>
+                            <th>Archivo de Malla</th>
+                            <th>Estado</th>
+                            <th>Accion</th>
+                            </thead>
+
+                            <tbody style="text-align: center;width: 100%">
+                                {{#each Periodo  as |periodo i|}}
+                                <tr>
+                                    <td>N°-{{i}}</td>
+
+                                    <td> {{periodo.fechaInicio}} </td>
+                                    <td> {{periodo.fechaFin}}</td>
+                                    <td> {{periodo.anio}}</td>
+                                    <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#pdf"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+
+                                    {{#if  periodo.estado}}
+                                    <td><a id="a{{i}}"  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Activo</span></a>
+
+                                        {{else}}
+                                    <td><a id="a{{i}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactivo</span></a>
+                                        {{/if}}
+                                    <td><a id="{{i}}" class="btn btn-success  "  href="#"  style="background: #FFC312;width: 100%" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Editar</span></a></td>
+                                </tr>
+                            <script>
+
+                                $("#{{i}}").click(function () {
+                                    $("#fecha_inicio").val("{{periodo.fechaInicio}}");
+                                    $("#fecha_fin").val("{{periodo.fechaFin}}");
+                                    $("#malla").val("{{periodo.external_malla}}");
+                                    $("#external").val("{{periodo.external_id}}");
+                                });
+                                $("#a{{i}}").click(function () {
+                                    $("#externalE").val("{{periodo.external_id}}");
+                                    $("#estado").val("{{periodo.estado}}");
+                                });
+                                $("#b{{i}}").click(function () {
+                                    PDF("{{periodo.archivo}}");
+                                });
+
+                            </script>
+
+                            {{/each}}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>  
+</div> 
+
+<!-- Modal Editar Estado -->
+<div id="Form" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <center>
+                <div class="modal-header" >
+                    <h2 class="modal-title" >Periodo Academico</h2> 
+                </div>
+            </center>
+            <div class="modal-body">
+                <form action="/guardar/periodo" id="estado" name="estado" method="POST">
+
+                    <input type="hidden" value="0" id="external" name="external"/>
+                    <div class="form-group">
+                        <label for="usuario">Malla Curricular:</label>
+                        <select class="form-control" id="malla" name="malla">
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Fecha de Inicio:</label>
+                        <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"  >
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="usuario">Fecha de Terminacion:</label>
+                        <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" >
+                    </div>
+
+
+                    <div class="modal-footer col-md-12"> 
+                        <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>
+                        <button type="button" class="btn btn-danger col-md-6"  data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!-- Modal Editar Estado -->
+<div id="Form2" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <center>
+                <div class="modal-header" >
+
+                    <h2 class="modal-title" style="margin-left: 20%">Estado de Periodo</h2> 
+                </div>
+            </center>
+            <div class="modal-body">
+                <form action="/bloquear/periodo" id="estado" method="POST">
+
+                    <input type="hidden"  id="externalE" name="externalE"/>
+
+                    <div class="form-group">
+                        <label for="estado">Estado:</label>
+                        <select type="text" class="form-control" id="estado"  name="estado">
+                            <option value="true">Ativo</option> 
+                            <option value="false">Inactivo</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer col-md-12"> 
+                        <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>
+                        <button type="button" class="btn btn-danger col-md-6"  data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="pdf" class="modal fade" role="dialog">
+    <div class="modal-body" id="pdf" >
+
+        <!-- Modal content-->
+
+    </div>
+</div>
+
+{% endblock %}

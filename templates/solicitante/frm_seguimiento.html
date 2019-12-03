@@ -1,0 +1,83 @@
+{% extends "solicitante/solicitante.html" %}
+{% load static %}
+{% block titulo %}Sistema Homologacion{% endblock %}
+{% block content %}
+<div class="card "  >
+    <div class="card-header"  style="background: #bbb ">
+        <div class="row ">
+            <div class="table-responsive" style="margin-top: 9%;margin-left: 16%;margin-right: 15%">
+                <div class="card"> 
+                    <!-- Trigger the modal with a button -->
+                    <div class="table-responsive" style="background: #e5e5e5">  
+                        <center>
+                            <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Lista d<span class="color-b">e Seguimientos</span></a>
+                            <br>
+                        </center>
+                        <table id="tabla" class=" table table-hover table-responsive navbar-brand"  >
+
+                            <thead class="color-b" style="text-align: center">                                         
+                            <th>Nro</th>
+                            <th>Tramite</th>
+                            <th>Sumillacion</th>
+                            <th>Revision Legal</th>
+                            <th>Asignacion de Docente</th>
+                            <th>Revision de Informacion</th>
+                            <th>Estado</th>
+                            </thead>
+
+                            <tbody style="text-align: center">
+
+                                               
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>  
+</div> 
+
+<div id="Form2" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <center>
+                <div class="modal-header" >
+
+                    <h2 class="modal-title" style="margin-left: 15%">Estado de Solicitud</h2> 
+                </div>
+            </center>
+            <div class="modal-body">
+                <form action="/editar/consultas/" id="consultas" method="POST">
+
+                    <input type="hidden"  id="external" name="external"/>
+                    <div class="form-group">
+                        <label for="usuario">Usuario:</label>
+                        <input type="text" class="form-control" id="usuario"  readonly="">
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado:</label>
+                        <select class="form-control" id="estado"  name="estado">
+                            <option>Aceptada</option> 
+                            <option>Denegada</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer col-md-12"> 
+                        <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>
+                        <button type="button" class="btn btn-danger col-md-6"  data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

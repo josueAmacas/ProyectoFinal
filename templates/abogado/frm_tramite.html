@@ -1,0 +1,137 @@
+{% extends "abogado/abogado.html" %}
+{% load static %}
+{% block titulo %}Sistema Homologacion{% endblock %}
+{% block content %}
+<div class="card" >
+
+    <div class="card-header"  style="background: #bbb">
+
+
+        <div class="row">
+
+            <div class="container" style="margin-top: 3% "> 
+                <!-- Trigger the modal with a button -->
+                <div class="table-responsive" style="margin-top: 10%;background: #e5e5e5">           
+                    <center>
+                        {{#if msg}}
+                        {{#if  msg.error}}
+                        <center>
+                            <label style="background: #FE2E2E">{{ msg.error}}</label>
+                        </center>
+                        {{/if}}
+                        {{#if msg.info}}
+                        <center>
+                            <label style="background: #04B431">{{ msg.info}}</label>
+                        </center>
+                        {{/if}}
+                        {{/if}}
+                        <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Lista d<span class="color-b">e Tramites</span></a>
+                        <br>                           
+                    </center>
+
+                    <table  class="table table-hover table-responsive" id="tabla" style="font-size: 100%">
+
+                        <thead class="color-b" style="font-size: 20px;text-align: center">                                         
+                        <th>Nro</th>
+                        <th>Foto</th>
+                        <th>Solicitante</th>
+                        <th>Codigo</th>
+                        <th>Tipo</th>
+
+                        <th>Carrera</th>
+                        <th>Carpeta</th>
+                        <th>Estado</th>
+
+                        </thead>
+
+                        <tbody style="text-align: center">
+                            {{#each this.Tramite  as |Tramite i|}}
+                            <tr>
+                                <td>{{i}}</td>
+                                <td>  
+
+                                    <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{Tramite.foto}}" width = "40" /> </a>
+
+                                </td>
+                                <td>{{Tramite.solicitante}}</td> 
+                                <td>{{Tramite.registro}}</td> 
+                                <td>{{Tramite.tipo}}</td>
+
+                                <td>{{Tramite.carrera}}</td> 
+                                <td>  <a href="/upload/archivos/{{Tramite.archivo}}"> <img class = "rounded" src = "/images/icons/archivo.png" width = "40" /> </a></td>
+                                {{#if  Tramite.estado}}
+                                <td><a id="{{i}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Aceptado</span></a>
+
+                                    {{else}}
+                                <td><a id="{{i}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">En Espera</span></a>
+                                    {{/if}}
+                            </tr>
+
+                        <script>
+
+                            $("#{{i}}").click(function () {
+                                $("#external").val("{{Tramite.external_id}}");
+                                $("#registro").val("{{Tramite.registro}}");
+                                $("#estado").val("{{Tramite.estado}}");
+                            });
+
+                        </script>
+
+
+                        {{/each}}
+
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>  
+</div> 
+
+<!-- Modal Editar Estado -->
+<div id="Form" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <center>
+                <div class="modal-header" >
+                    <h2 class="modal-title" >Revicion Legal</h2> 
+                </div>
+            </center>
+            <div class="modal-body">
+                <form action="/revision/sellos"  method="POST">
+                    <input type="hidden" class="form-control"  value="0" id="external" name="external"  readonly>
+
+                    <div class="form-group">
+                        <label for="usuario">Tramite:</label>
+                        <input type="text" class="form-control"   id="registro"   readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado:</label>
+                        <select class="form-control" id="estado" name="estado">
+                            <option value="true">Aceptado</option>
+                            <option value="false">En Espera</option>
+                        </select>
+                    </div>
+
+
+                    <div class="modal-footer col-md-12"> 
+                        <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>
+                        <button type="button" class="btn btn-danger col-md-6"  data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

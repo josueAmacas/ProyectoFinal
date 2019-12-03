@@ -1,0 +1,141 @@
+{% extends "decano/decano.html" %}
+{% load static %}
+{% block titulo %}Sistema Homologacion{% endblock %}
+{% block content %}
+<div class="card" >
+
+    <div class="card-header"  style="background: #bbb">
+
+        <div class="container ">
+
+            <div class="row">
+
+                <div class="card" style="margin-top: 10%"> 
+                    <!-- Trigger the modal with a button -->
+
+
+                    <div class="table-responsive" style="background: #e5e5e5">           
+
+                        <center>
+                            {{#if msg}}
+                            {{#if  msg.error}}
+                            <center>
+                                <label style="background: #FE2E2E">{{ msg.error}}</label>
+                            </center>
+                            {{/if}}
+                            {{#if msg.info}}
+                            <center>
+                                <label style="background: #04B431">{{ msg.info}}</label>
+                            </center>
+                            {{/if}}
+                            {{/if}}
+                            <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Lista d<span class="color-b">e Solicitudes</span></a>
+
+                            <br>
+                        </center>
+                        <table id="tabla" class="table table-hover table-responsive  ">
+
+                            <thead class="color-b" style="font-size: 20px;text-align: center">                                         
+                            <th>Nro</th>
+                            <th>Foto</th>
+                            <th>Usuario</th>
+                            <th>Cedula</th> 
+                            <th>Tramite</th>
+                            <th>Motivo</th> 
+                            <th>Carrera</th>
+                            <th>Solicitud</th>
+                            <th>Sumillacion</th>
+                            </thead>
+
+                            <tbody style="text-align: center">
+
+                                {{#each this.Solicitud  as |Solicitud i|}}
+                                <tr>
+                                    <td>{{i}}</td>
+                                    <td>  
+
+                                        <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{Solicitud.foto}}" width = "40" /> </a>
+
+                                    </td>
+                                    <td>{{Solicitud.solicitante}}</td> 
+                                    <td>{{Solicitud.cedula}}</td> 
+                                    <td>{{Solicitud.registro}}</td>
+                                    <td>{{Solicitud.tipo}}</td>
+
+                                    <td>{{Solicitud.carrera}}</td> 
+                                    <td> <a   href="/upload/archivos/{{Solicitud.archivo}}"> <img class = "rounded" src = "/images/icons/archivo.png" width = "40" /> </a></td>
+                                    {{#if  Solicitud.estado}}
+                                    <td><a  id="{{i}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">Sumillada</span></a>
+
+                                        {{else}}
+                                    <td><a  id="{{i}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">En espera</span></a>
+                                        {{/if}}
+                                </tr>
+
+                            <script>
+
+                                $("#{{i}}").click(function () {
+
+                                    $("#usuario").val("{{Solicitud.solicitante}}");
+                                    $("#estado").val("{{Solicitud.estado}}");
+                                    $("#external").val("{{Solicitud.external_id}}");
+
+                                });
+
+                            </script>
+
+                            {{/each}}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>  
+</div> 
+
+<div id="Form2" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-header" >
+                <center>
+                    <h2 class="modal-title" >Registro de Sumillacion</h2> 
+                </center>
+            </div>
+
+            <div class="modal-body">
+                <form action="/sumillar/solicitudes" id="consultas" method="POST">
+
+                    <input type="hidden"  id="external" name="external"/>
+                    <div class="form-group">
+                        <label for="usuario">Usuario:</label>
+                        <input type="text" class="form-control" id="usuario"  readonly="">
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado:</label>
+                        <select  class="form-control" id="estado"  name="estado">
+                            <option value="true">Sumillada</option> 
+                            <option value="false">En espera</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer col-md-12"> 
+                        <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>
+                        <button type="button" class="btn btn-danger col-md-6"  data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

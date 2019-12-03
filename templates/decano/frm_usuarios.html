@@ -1,0 +1,196 @@
+{% extends "decano/decano.html" %}
+{% load static %}
+{% block titulo %}Sistema Homologacion{% endblock %}
+{% block content %}
+<script>
+    $(document).ready(function () {
+        $("#rols").change(function () {
+            var rol = $("#rols").val();
+
+            if (rol == "3") {
+                alert(rol);
+
+            }
+        });
+    });
+</script>
+<div class="card" >
+
+    <div class="card-header " style="background: #bbb">
+
+
+        <div class="row">
+
+            <div class="table-responsive" style="margin-left: 0.5%;margin-right: 0.5%"> 
+                <!-- Trigger the modal with a button -->
+
+
+                <div class="table-responsive" style="margin-top: 6%;background: #e5e5e5">           
+                    <center>
+                        {{#if msg}}
+                        {{#if  msg.error}}
+                        <center>
+                            <label style="background: #FE2E2E">{{ msg.error}}</label>
+                        </center>
+                        {{/if}}
+                        {{#if msg.info}}
+                        <center>
+                            <label style="background: #04B431">{{ msg.info}}</label>
+                        </center>
+                        {{/if}}
+                        {{/if}}
+
+                        <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Lista d<span class="color-b">e Usuarios</span></a>
+                        <br>
+                    </center>
+                    <table id="tabla" class="table table-hover table-responsive navbar-brand " style="font-size: 105%">
+
+                        <thead style="text-align: center" class="color-b ">                                         
+                        <th>Nro</th>
+                        <th>Foto</th>
+                        <th>Usuario</th>
+                        <th>Cedula</th>
+                        <th>Fecha de Nacimiento</th>
+                        <th>Edad</th>
+                        <th>Rol</th>
+                        <th>Telefono</th>
+                        <th>Correo</th>
+                        <th>Direccion</th>
+                        <th>Estado</th>
+                        </thead>
+
+                        <tbody style="text-align: center">
+                            {{#each this.listaC  as |cuenta i|}}
+                            <tr>
+                                <td>{{i}}</td>
+                                <td>  
+
+                                    <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{cuenta.persona.foto}}" width = "40" /> </a>
+
+                                </td>
+                                <td>{{cuenta.persona.nombres}} {{cuenta.persona.apellidos}}</td>
+                                <td>{{cuenta.persona.cedula}}</td> 
+                                <td>{{cuenta.persona.fecha_nacimiento}}</td> 
+                                <td>{{cuenta.persona.edad}}</td> 
+                                <td><a id="a{{i}}"  class="btn btn-success col-md-12 " href="#"  style="margin-left: 5%;background: #2eca6a" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">{{cuenta.persona.rol.nombre}}</span></a>
+                                <td>{{cuenta.persona.telefono}}</td> 
+                                <td>{{cuenta.correo}}</td> 
+                                <td >{{cuenta.persona.direccion}}</td> 
+                                {{#if  cuenta.estado}}
+                                <td><a id="{{i}}"  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Activo</span></a>
+
+                                    {{else}}
+                                <td><a id="{{i}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactivo</span></a>
+                                    {{/if}}
+
+                            </tr>
+                        <script>
+
+                            $("#{{i}}").click(function () {
+                                $("#usuario").val("{{cuenta.persona.nombres}} {{cuenta.persona.apellidos}}");
+                                $("#estado").val("{{cuenta.estado}}");
+                                $("#externalC").val("{{cuenta.external_id}}");
+                            });
+                            $("#a{{i}}").click(function () {
+                                $("#usuarioR").val("{{cuenta.persona.nombres}} {{cuenta.persona.apellidos}}");
+                                $("#rol").val("{{cuenta.persona.id_rol}}")
+                                $("#externalR").val("{{cuenta.persona.external_id}}");
+
+                            });
+
+                        </script>
+
+                        {{/each}}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>  
+</div> 
+
+<!-- Modal Editar Rol -->
+<div id="Form" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <center>
+                <div class="modal-header" >
+
+                    <h2 class="modal-title" style="margin-left: 20%">Rol de Usuario</h2> 
+                </div>
+            </center>
+            <div class="modal-body">
+                <form action="/rol/cuenta" id="roles" method="POST">
+
+                    <input type="hidden"  id="externalR" name="externalR"/>
+                    <div class="form-group">
+                        <label for="usuario">Usuario:</label>
+                        <input type="text" class="form-control" id="usuarioR"  readonly="">
+                    </div>
+                    <div class="form-group">
+                        <label for="rol">Rol:</label>
+                        <select type="text" class="form-control" id="rol"  name="rol">
+                            {{#each this.listaR  as |rol|}}
+                            <option value="{{rol.id}}">{{rol.nombre}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+
+                    <div class="modal-footer col-md-12"> 
+                        <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>
+                        <button type="button" class="btn btn-danger col-md-6"  data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!-- Modal Editar Estado -->
+<div id="Form2" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <center>
+                <div class="modal-header" >
+
+                    <h2 class="modal-title" style="margin-left: 20%">Estado de Usuario</h2> 
+                </div>
+            </center>
+            <div class="modal-body">
+                <form action="/estado/cuenta" id="estado" method="POST">
+
+                    <input type="hidden"  id="externalC" name="externalC"/>
+                    <div class="form-group">
+                        <label for="usuario">Usuario:</label>
+                        <input type="text" class="form-control" id="usuario"  readonly="">
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado:</label>
+                        <select type="text" class="form-control" id="estado"  name="estado">
+                            <option value="true">Activo</option> 
+                            <option value="false">Inactivo</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer col-md-12"> 
+                        <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>
+                        <button type="button" class="btn btn-danger col-md-6"  data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

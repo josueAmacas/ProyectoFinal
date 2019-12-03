@@ -1,0 +1,220 @@
+{% extends "login/login.html" %}
+{% load static %}
+{% block titulo %}Registro Usuario{% endblock %}
+{% block content %}
+<script>
+    function cedula(txtCedula) {
+        $.ajax({
+            url: '/registro/' + txtCedula,
+            type: 'GET',
+            dataType: 'JSON',
+            success: function (data, textStatus, jqXHR) {
+
+                if (data === true) {
+                    var html = '<label style="background: #FE2E2E">El usuario ya existe</label>';
+                    $("#mensaje").html(html);
+                    $('#cedula').val("");
+                } else {
+                    $('#apellidos').attr('readonly', false);
+                    $('#nombres').attr('readonly', false);
+                    $('#fechaNacimiento').attr('readonly', false);
+                    $('#telefono').attr('readonly', false);
+                    $('#direccion').attr('readonly', false);
+                    $('#correo').attr('readonly', false);
+                    $('#clave').attr('readonly', false);
+                    $("#mensaje").html("");
+                }
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+
+    $(function () {
+        $.validator.addMethod("soloLetras", function (value, element) {
+            return this.optional(element) || /^[a-z\s]+$/i.test(value);
+        }, "Solo letras ");
+
+        $.validator.addMethod("cedula", function (value, element) {
+            return this.optional(element) || validarCedula(value);
+        }, "Ingrese una cedula valida ");
+
+        $("#form_registro").validate({
+            rules: {
+                cedula: {
+                    required: true,
+                    number: true,
+                    cedula: true,
+                    minlength: 10,
+                    maxlength: 10
+                },
+                apellidos: {
+                    required: true,
+                    soloLetras: true
+                },
+                nombres: {
+                    soloLetras: true,
+                    required: true
+                },
+                fechaNacimiento: {
+                    required: true
+                },
+                edad: {
+                    required: true
+                },
+                telefono: {
+                    required: true
+                },
+                direccion: {
+                    required: true,
+                    maxlength: 255
+                },
+                correo: {
+                    required: true
+                },
+                clave: {
+                    required: true
+                }
+            }
+        });
+    });
+
+    $(document).ready(function () {
+
+        $('select option[value="4"]').attr('selected', true);
+        $('#apellidos').attr('readonly', true);
+        $('#nombres').attr('readonly', true);
+        $('#fechaNacimiento').attr('readonly', true);
+        $('#telefono').attr('readonly', true);
+        $('#direccion').attr('readonly', true);
+        $('#correo').attr('readonly', true);
+        $('#clave').attr('readonly', true);
+        $("#cedula").keyup(function () {
+            var txt = $("#cedula").val();
+            if (txt.length === 10) {
+                cedula(txt);
+            } else {
+                $('#apellidos').attr('readonly', true);
+                $('#nombres').attr('readonly', true);
+                $('#fechaNacimiento').attr('readonly', true);
+                $('#telefono').attr('readonly', true);
+                $('#direccion').attr('readonly', true);
+                $('#correo').attr('readonly', true);
+                $('#clave').attr('readonly', true);
+
+                $('#apellidos').val("");
+                $('#nombres').val("");
+                $('#fechaNacimiento').val("");
+                $('#telefono').val("");
+                $('#direccion').val("");
+                $('#correo').val("");
+                $('#clave').val("");
+            }
+        });
+    });
+</script>
+
+<div class="d-flex justify-content-center h-100" style="margin-top: 10%;margin-bottom: 10%"   >
+    <div class="card">
+
+        <center>
+            <div id="mensaje"></div>
+            <div class="card-header">
+                <h3>Registro usuario</h3> 
+            </div>  
+        </center>
+
+        <div class="card-body" >
+            <form id="form_registro" name="form_registro" method="POST" style="color: white">{% csrf_token %}
+                <center>
+                    <label style="background: #FE2E2E">Datos Generales</label>
+                    <br>
+
+                </center>
+                <br>
+                <div class="form-group row">
+                    <div class="input-group form-group col-sm-12">
+
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        {{fPersona.cedula}}
+                    </div>   
+                </div>
+                <div class="form-group row"> 
+                    <div class="input-group form-group col-sm-6">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        {{fPersona.apellidos}}
+                    </div>
+                    <div class="input-group form-group col-sm-6">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        {{fPersona.nombres}}
+                    </div>
+                </div>
+                <div class="form-group row"> 
+                    <div class="input-group form-group col-sm-6">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        {{fPersona.fechaNacimiento}}
+                    </div>                  
+                    <div class="input-group form-group col-sm-6">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        {{fPersona.edad}}
+                    </div>
+                </div>
+                <div class="form-group row"> 
+                    <div class="input-group form-group col-sm-6">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        {{fPersona.telefono}}
+                    </div>
+                    <div class="input-group form-group col-sm-6">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        {{fPersona.direccion}}
+                    </div>
+                </div>
+                {{fPersona.rol}}
+                <center>
+                    <label style="background: #FE2E2E">Datos de Cuenta</label>
+                </center>
+                <br>
+                Correo Electronico
+                <div class="input-group form-group">                                
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    </div>
+                    {{fCuenta.correo}}
+                </div>
+                Clave
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-key"></i></span>
+                    </div>
+                    {{fCuenta.clave}}
+                </div>                            
+                <div class="form-group">
+                    <button type="submit"  class="btn float-right login_btn">Registrarse</button>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer">
+            <div class="d-flex justify-content-center links">
+                Ya tengo cuenta?<a href="/login"  style="color: #FFC312">Iniciar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

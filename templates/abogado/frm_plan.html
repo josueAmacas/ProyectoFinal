@@ -1,0 +1,445 @@
+{% extends "abogado/abogado.html" %}
+{% load static %}
+{% block titulo %}Sistema Homologacion{% endblock %}
+{% block content %}
+<script>
+     function PDF(txt) {
+        var html = '<div class="embed-responsive" style="padding-bottom:70%">';
+        html += '<object data="/upload/silabos/' + txt + '.pdf" type="application/pdf" width="100%" height="100%"></object>';
+        html += '</div>';
+        $("#pdf").html(html);
+    }
+
+</script>
+<div class="card" >
+
+    <div class="card-header " style="background: #bbb">
+
+
+        <div class="row">
+
+            <div class="container"  > 
+                <!-- Trigger the modal with a button -->
+
+
+                <div class="table-responsive" style="margin-top: 10%;background: #e5e5e5">           
+                    <center>
+                        {{#if msg}}
+                        {{#if  msg.error}}
+                        <center>
+                            <label style="background: #FE2E2E">{{ msg.error}}</label>
+                        </center>
+                        {{/if}}
+                        {{#if msg.info}}
+                        <center>
+                            <label style="background: #04B431">{{ msg.info}}</label>
+                        </center>
+                        {{/if}}
+                        {{/if}}
+                        <a class="navbar-brand text-brand " href="#" style="font-size: 200%">{{Carrera.area}}</a>
+                        <br>
+                        <a class="navbar-brand text-brand" href="#" style="font-size: 150%">{{Carrera.nombre}}</a>
+                        <br>
+                        <a class="navbar-brand text-brand" href="#" style="font-size: 100%">Malla <span class="color-b"> Curricular {{Malla.anio}}</span></a>
+                        <br>
+                        {{#if   Malla.estado}}
+                        <td><a  class="btn btn-success "  href="#"  style="background: #26a356;width: 100%"><span class="glyphicon glyphicon-pencil">Activa</span></a>
+
+                            {{else}}
+                        <td><a class="btn btn-success "  href="#"  style="background: #FE2E2E;width: 100%"><span class="glyphicon glyphicon-pencil">Inactiva</span></a>
+                            {{/if}}
+                    </center>
+
+                    <table id="malla" class="table table-border table-responsive " >
+
+                        <thead style="font-size: 120%;text-align: initial" class="btn btn-success navbar-brand " >
+                            <tr style="">
+                                <th>Codigo A-001: </th>  
+                                <th>Ciencias Basias de la Carrera e Informatica</th>
+                                <th>  |  </th>
+                                <th>Leyenda</th>
+                            </tr>
+                            <tr style="">  
+                                <th>Codigo B-001: </th>  
+                                <th>Practicas y Laboratorios</th>
+                                <th>  |  </th>
+                                <th>TOTAL DE CREDITOS: 354</th>
+                            </tr>
+                            <tr style="">
+                                <th>Codigo C-001: </th>  
+                                <th>Ciencias de Formacion Profecional</th>
+                                <th>  |  </th>
+                                <th>TOTAL DE ASIGNATURAS: 55</th>
+                            </tr>
+                            <tr style="">
+                                <th>Codigo D-001: </th>  
+                                <th>Asignaturas de Educacion General</th>
+                            </tr>
+                        </thead>
+                        <tbody style="text-align: center">
+                            <tr>
+                                <th>Ciclo I </th>
+                                <th>{{Nombre1}}</th> 
+                            </tr>
+                            <tr style="background: #228a47">
+                                <th>#</th> 
+                                <th>Codigo</th>  
+                                <th>Nombre</th>
+                                <th>Creditos</th>
+                                <th>Duracion</th>
+                                <th>Obligatoria</th>
+                                <th>Silabo Actual</th>
+
+                            </tr>
+                            {{#each this.Ciclo1  as |ciclo i|}}
+                            <tr style="background: #FFC312">
+                                <th>{{i}}</th> 
+
+                                <th>{{ciclo.codigo}}</th>  
+                                <th>{{ciclo.nombre}}</th>
+                                <th>{{ciclo.creditos}}</th>
+                                <th>{{ciclo.duracion}}</th>
+                                <th>{{ciclo.obligatoria}}</th>
+                                <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                        <script>
+
+                            $("#b{{i}}").click(function () {
+                                PDF("{{ciclo.silabo.external_id}}");
+                            });
+                        </script>
+
+                        </tr>
+                        {{/each }}
+                        <tr>
+                            <th>Ciclo II </th>
+                            <th>{{Nombre2}}</th> 
+                        </tr>
+                        <tr style="background: #228a47">
+                            <th>#</th> 
+                            <th>Codigo</th>  
+                            <th>Nombre</th>
+                            <th>Creditos</th>
+                            <th>Duracion</th>
+                            <th>Obligatoria</th>
+                            <th>Silabo Actual</th>
+
+                        </tr>
+                        {{#each this.Ciclo2  as |ciclo i|}}
+                        <tr style="background: #FFC312">
+                            <th>{{i}}</th> 
+
+                            <th>{{ciclo.codigo}}</th>  
+                            <th>{{ciclo.nombre}}</th>
+                            <th>{{ciclo.creditos}}</th>
+                            <th>{{ciclo.duracion}}</th>
+                            <th>{{ciclo.obligatoria}}</th>
+                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                        <script>
+
+                            $("#b{{i}}").click(function () {
+                                PDF("{{ciclo.silabo.external_id}}");
+                            });
+                        </script>
+
+                        </tr>
+                        {{/each }}
+                        <tr>
+                            <th>Ciclo III </th>
+                            <th>{{Nombr31}}</th> 
+                        </tr>
+                        <tr style="background: #228a47">
+                            <th>#</th> 
+                            <th>Codigo</th>  
+                            <th>Nombre</th>
+                            <th>Creditos</th>
+                            <th>Duracion</th>
+                            <th>Obligatoria</th>
+                            <th>Silabo Actual</th>
+
+                        </tr>
+                        {{#each this.Ciclo3  as |ciclo i|}}
+                        <tr style="background: #FFC312">
+                            <th>{{i}}</th> 
+
+                            <th>{{ciclo.codigo}}</th>  
+                            <th>{{ciclo.nombre}}</th>
+                            <th>{{ciclo.creditos}}</th>
+                            <th>{{ciclo.duracion}}</th>
+                            <th>{{ciclo.obligatoria}}</th>
+                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                        <script>
+
+                            $("#b{{i}}").click(function () {
+                                PDF("{{ciclo.silabo.external_id}}");
+                            });
+                        </script>
+
+                        </tr>
+                        {{/each }}
+                        <tr>
+                            <th>Ciclo IV </th>
+                            <th>{{Nombre4}}</th> 
+                        </tr>
+                        <tr style="background: #228a47">
+                            <th>#</th> 
+                            <th>Codigo</th>  
+                            <th>Nombre</th>
+                            <th>Creditos</th>
+                            <th>Duracion</th>
+                            <th>Obligatoria</th>
+                            <th>Silabo Actual</th>
+
+                        </tr>
+                        {{#each this.Ciclo4  as |ciclo i|}}
+                        <tr style="background: #FFC312">
+                            <th>{{i}}</th> 
+
+                            <th>{{ciclo.codigo}}</th>  
+                            <th>{{ciclo.nombre}}</th>
+                            <th>{{ciclo.creditos}}</th>
+                            <th>{{ciclo.duracion}}</th>
+                            <th>{{ciclo.obligatoria}}</th>
+                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                        <script>
+
+                            $("#b{{i}}").click(function () {
+                                PDF("{{ciclo.silabo.external_id}}");
+                            });
+                        </script>
+
+                        </tr>
+                        {{/each }}
+                        <tr>
+                            <th>Ciclo V </th>
+                            <th>{{Nombre5}}</th> 
+                        </tr>
+                        <tr style="background: #228a47">
+                            <th>#</th> 
+                            <th>Codigo</th>  
+                            <th>Nombre</th>
+                            <th>Creditos</th>
+                            <th>Duracion</th>
+                            <th>Obligatoria</th>
+                            <th>Silabo Actual</th>
+
+                        </tr>
+                        {{#each this.Ciclo5  as |ciclo i|}}
+                        <tr style="background: #FFC312">
+                            <th>{{i}}</th> 
+
+                            <th>{{ciclo.codigo}}</th>  
+                            <th>{{ciclo.nombre}}</th>
+                            <th>{{ciclo.creditos}}</th>
+                            <th>{{ciclo.duracion}}</th>
+                            <th>{{ciclo.obligatoria}}</th>
+                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                        <script>
+
+                            $("#b{{i}}").click(function () {
+                                PDF("{{ciclo.silabo.external_id}}");
+                            });
+                        </script>
+
+                        </tr>
+                        {{/each }}
+                        <tr>
+                            <th>Ciclo VI </th>
+                            <th>{{Nombre6}}</th> 
+                        </tr>
+                        <tr style="background: #228a47">
+                            <th>#</th> 
+                            <th>Codigo</th>  
+                            <th>Nombre</th>
+                            <th>Creditos</th>
+                            <th>Duracion</th>
+                            <th>Obligatoria</th>
+                            <th>Silabo Actual</th>
+
+                        </tr>
+                        {{#each this.Ciclo6  as |ciclo i|}}
+                        <tr style="background: #FFC312">
+                            <th>{{i}}</th> 
+
+                            <th>{{ciclo.codigo}}</th>  
+                            <th>{{ciclo.nombre}}</th>
+                            <th>{{ciclo.creditos}}</th>
+                            <th>{{ciclo.duracion}}</th>
+                            <th>{{ciclo.obligatoria}}</th>
+                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                        <script>
+
+                            $("#b{{i}}").click(function () {
+                                PDF("{{ciclo.silabo.external_id}}");
+                            });
+                        </script>
+
+                        </tr>
+                        {{/each }}
+                        <tr>
+                            <th>Ciclo VII </th>
+                            <th>{{Nombre7}}</th> 
+                        </tr>
+                        <tr style="background: #228a47">
+                            <th>#</th> 
+                            <th>Codigo</th>  
+                            <th>Nombre</th>
+                            <th>Creditos</th>
+                            <th>Duracion</th>
+                            <th>Obligatoria</th>
+                            <th>Silabo Actual</th>
+
+                        </tr>
+                        {{#each this.Ciclo7  as |ciclo i|}}
+                        <tr style="background: #FFC312">
+                            <th>{{i}}</th> 
+
+                            <th>{{ciclo.codigo}}</th>  
+                            <th>{{ciclo.nombre}}</th>
+                            <th>{{ciclo.creditos}}</th>
+                            <th>{{ciclo.duracion}}</th>
+                            <th>{{ciclo.obligatoria}}</th>
+                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                        <script>
+
+                            $("#b{{i}}").click(function () {
+                                PDF("{{ciclo.silabo.external_id}}");
+                            });
+                        </script>
+
+                        </tr>
+                        {{/each }}
+                        <tr>
+                            <th>Ciclo VIII </th>
+                            <th>{{Nombre8}}</th> 
+                        </tr>
+                        <tr style="background: #228a47">
+                            <th>#</th> 
+                            <th>Codigo</th>  
+                            <th>Nombre</th>
+                            <th>Creditos</th>
+                            <th>Duracion</th>
+                            <th>Obligatoria</th>
+                            <th>Silabo Actual</th>
+
+                        </tr>
+                        {{#each this.Ciclo8  as |ciclo i|}}
+                        <tr style="background: #FFC312">
+                            <th>{{i}}</th> 
+
+                            <th>{{ciclo.codigo}}</th>  
+                            <th>{{ciclo.nombre}}</th>
+                            <th>{{ciclo.creditos}}</th>
+                            <th>{{ciclo.duracion}}</th>
+                            <th>{{ciclo.obligatoria}}</th>
+                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                        <script>
+
+                            $("#b{{i}}").click(function () {
+                                PDF("{{ciclo.silabo.external_id}}");
+                            });
+                        </script>
+
+                        </tr>
+                        {{/each }}
+                        <tr>
+                            <th>Ciclo IX </th>
+                            <th>{{Nombre9}}</th> 
+                        </tr>
+                        <tr style="background: #228a47">
+                            <th>#</th> 
+                            <th>Codigo</th>  
+                            <th>Nombre</th>
+                            <th>Creditos</th>
+                            <th>Duracion</th>
+                            <th>Obligatoria</th>
+                            <th>Silabo Actual</th>
+
+                        </tr>
+                        {{#each this.Ciclo9  as |ciclo i|}}
+                        <tr style="background: #FFC312">
+                            <th>{{i}}</th> 
+
+                            <th>{{ciclo.codigo}}</th>  
+                            <th>{{ciclo.nombre}}</th>
+                            <th>{{ciclo.creditos}}</th>
+                            <th>{{ciclo.duracion}}</th>
+                            <th>{{ciclo.obligatoria}}</th>
+                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                        <script>
+
+                            $("#b{{i}}").click(function () {
+                                PDF("{{ciclo.silabo.external_id}}");
+                            });
+                        </script>
+
+                        </tr>
+                        {{/each }}
+                        <tr>
+                            <th>Ciclo X </th>
+                            <th>{{Nombre10}}</th> 
+                        </tr>
+                        <tr style="background: #228a47">
+                            <th>#</th> 
+                            <th>Codigo</th>  
+                            <th>Nombre</th>
+                            <th>Creditos</th>
+                            <th>Duracion</th>
+                            <th>Obligatoria</th>
+                            <th>Silabo Actual</th>
+
+                        </tr>
+                        {{#each this.Ciclo10  as |ciclo i|}}
+                        <tr style="background: #FFC312">
+                            <th>{{i}}</th> 
+
+                            <th>{{ciclo.codigo}}</th>  
+                            <th>{{ciclo.nombre}}</th>
+                            <th>{{ciclo.creditos}}</th>
+                            <th>{{ciclo.duracion}}</th>
+                            <th>{{ciclo.obligatoria}}</th>
+                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                        <script>
+
+                            $("#b{{i}}").click(function () {
+                                PDF("{{ciclo.silabo.external_id}}");
+                            });
+                        </script>
+
+                        </tr>
+                        {{/each }}
+
+                        </tbody>
+
+
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>  
+</div> 
+
+<!-- Modal Editar Estado -->
+<div id="PDF" class="  modal fade" role="dialog" style="">
+    <div class="container">
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="card" >
+                <div class="card-header " >
+                    <a type="button" class="btn btn-danger col-md-12" href="/menu/plan">Cerrar</a>
+
+                    <div id="pdf">           
+
+                    </div>
+                </div>  
+
+            </div> 
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

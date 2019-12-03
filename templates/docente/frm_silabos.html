@@ -1,0 +1,257 @@
+{% extends "docente/docente.html" %}
+{% load static %}
+{% block titulo %}Sistema Homologacion{% endblock %}
+{% block content %}
+<script>
+    function cargarSilabos(txt) {
+
+        $.ajax({
+            url: '/lista/silabos/API/' + txt,
+            type: 'GET',
+            dataType: 'JSON',
+            success: function (data, textStatus, jqXHR) {
+                var html = "";
+
+                html += '<input type="hidden" value="' + data.external_id + '" id="external" name="external"/>';
+                html += ' <label for="usuario">Perido Academico:</label>';
+                html += ' <input  type="text" class="form-control"  value=" Desde:' + data.periodoAcademico.fechaInicio + 'Hasta:' + data.periodoAcademico.fechaFin + '"  readonly >';
+                html += ' <label for="estado">Materia:</label>';
+                html += '<input type="text" class="form-control" value="' + data.materium.nombre + '" name="materia" readonly>';
+                html += '<label for="archivo">Archivo:</label>';
+                html += '<div class="input-group">';
+                html += '<input type="file" class="custom-file-input" id="archivo" name="archivo" >';
+                html += '<label class="custom-file-label" >Elegir Archivo</label>';
+                html += '</div>';
+                $("#silabo").html(html);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+
+    function PDF(txt) {
+        var html = '<div class="embed-responsive" style="padding-bottom:70%">';
+        html += '<object data="/upload/silabos/' + txt + '.pdf" type="application/pdf" width="100%" height="100%"></object>';
+        html += '</div>';
+        $("#pdf").html(html);
+    }
+
+    $(function () {
+
+        $("#estado").validate({
+            rules: {
+                periodo: {
+                    required: true
+                }
+
+
+            }
+        });
+    });
+
+</script>
+
+<div class="card" >
+
+    <div class="card-header"  style="background: #bbb">
+
+
+        <div class="row">
+
+            <div class="container" style="margin-top: 3%"> 
+                <!-- Trigger the modal with a button -->
+
+
+                <div class="table-responsive" style="margin-top: 10%;background: #e5e5e5">           
+
+                    <center>
+                        {{#if msg}}
+                        {{#if  msg.error}}
+                        <center>
+                            <label style="background: #FE2E2E">{{ msg.error}}</label>
+                        </center>
+                        {{/if}}
+                        {{#if msg.info}}
+                        <center>
+                            <label style="background: #04B431">{{ msg.info}}</label>
+                        </center>
+                        {{/if}}
+                        {{/if}}
+                        <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Lista d<span class="color-b">e Silabos</span></a>
+                        <br>                           
+                    </center>
+                    <a onclick="" class="btn btn-success  "  href="#"  style="background: #FFC312;width: 100%" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Agregar Silabo Academico</span></a>
+                    <br>
+                    <table  class="table table-hover table-responsive" id="tabla" style="font-size: 100%">
+
+                        <thead class="color-b" style="font-size: 20px;text-align: center">                                         
+                        <th>Nro</th>
+
+                        <th>Periodo Academico</th>
+                        <th>Materia</th>
+
+                        <th>Silabos</th>
+                        <th>Estado</th>
+                        <th>Accion</th>
+                        </thead>
+
+                        <tbody style="text-align: center">
+
+                            {{#each Silabo  as |silabo i|}}
+                            <tr>
+                                <td>N°-{{i}}</td>
+
+                                <td> Desde: {{silabo.periodoAcademico.fechaInicio}} Hasta: {{silabo.periodoAcademico.fechaFin}} </td>
+                                <td> {{silabo.materium.nombre}}</td>
+                                <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                                {{#if  silabo.estado}}
+                                <td><a  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Activo</span></a>
+
+                                    {{else}}
+                                <td><a   class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactivo</span></a>
+                                    {{/if}}
+                                <td><a id="{{i}}" class="btn btn-success  "  href="#"  style="background: #FFC312;width: 100%" data-placement="top" data-toggle="modal" data-target="#FormEditar" title="Editar" ><span class="glyphicon glyphicon-pencil">Editar</span></a></td>
+                            </tr>
+                        <script>
+                            $("#{{i}}").click(function () {
+
+                                cargarSilabos("{{silabo.external_id}}");
+                            });
+                            $("#b{{i}}").click(function () {
+                                PDF("{{silabo.external_id}}");
+                            });
+                        </script>
+                        {{/each}}
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>  
+</div> 
+
+<!-- Modal Editar Estado -->
+<div id="FormEditar" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <center>
+                <div class="modal-header" >
+                    <h2 class="modal-title" >Silabos Academico</h2> 
+                </div>
+            </center>
+            <div class="modal-body">
+                <form enctype = "multipart/form-data" action="/editar/silabos/" id="estado1" method="POST">
+
+                    <div class="form-group" id="silabo">                      
+
+
+                    </div>
+
+
+                    <div class="modal-footer col-md-12"> 
+                        <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>
+                        <button type="button" class="btn btn-danger col-md-6"  data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- Modal Editar Estado -->
+<div id="Form" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <center>
+                <div class="modal-header" >
+                    <h2 class="modal-title" >Silabos Academico</h2> 
+                </div>
+            </center>
+            <div class="modal-body">
+                <form enctype = "multipart/form-data" action="/guardar/silabos/" id="estado" method="POST">
+
+                    <div class="form-group">
+                        <label for="usuario">Periodo Academico:</label>
+                        <select class="form-control" id="perido" name="periodo">
+                            {{#each Periodo  as |periodo i|}}
+                            <option value="{{periodo.id}}">Desde: {{periodo.fechaInicio}}  Hasta: {{periodo.fechaFin}} </option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Materia:</label>
+                        <select class="form-control" id="materia" name="materia" >
+                            {{#each Materia  as |materia i|}}
+                            <option value="{{materia.id}}">{{materia.nombre}}</option>
+                            {{/each}}
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="archivo">Archivo:</label>
+                        <div class="input-group">
+                            <input type="file" class="custom-file-input" id="archivo" name="archivo" >
+                            <label class="custom-file-label" >Elegir Archivo Formato Tipo .pdf</label>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer col-md-12"> 
+                        <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>
+                        <button type="button" class="btn btn-danger col-md-6"  data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<!-- Modal Editar Estado -->
+<div id="PDF" class="  modal fade" role="dialog" style="">
+    <div class="container">
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="card" >
+                <div class="card-header " >
+                    <a type="button" class="btn btn-danger col-md-12" href="/lista/silabos">Cerrar</a>
+
+                    <div id="pdf">           
+
+                    </div>
+                </div>  
+
+            </div> 
+
+        </div>
+
+    </div>
+</div>
+{% endblock %} 

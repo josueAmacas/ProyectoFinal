@@ -1,0 +1,376 @@
+{% extends "decano/decano.html" %}
+{% load static %}
+{% block titulo %}Sistema Homologacion{% endblock %}
+{% block content %}
+<script>
+    $(function () {
+        $.validator.addMethod("soloLetras", function (value, element) {
+            return this.optional(element) || /^[a-z\s]+$/i.test(value);
+        }, "Solo letras ");
+
+        $.validator.addMethod("cedula", function (value, element) {
+            return this.optional(element) || validarCedula(value);
+        }, "Ingrese una cedula valida ");
+
+        $("#form_registro").validate({
+            rules: {
+                cedula: {
+                    required: true,
+                    number: true,
+                    cedula: true,
+                    minlength: 10,
+                    maxlength: 10
+                },
+                apellidos: {
+                    required: true,
+                    soloLetras: true
+                },
+                nombres: {
+                    soloLetras: true,
+                    required: true
+                },
+                fecha_nacimiento: {
+                    required: true
+                },
+                edad: {
+                    required: true
+                },
+                telefono: {
+                    required: true
+                },
+                direccion: {
+                    required: true,
+                    maxlength: 255
+                }
+
+
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $("#cedula").val("{{usuario.persona.cedula}}");
+        $("#apellidos").val("{{usuario.persona.apellidos}}");
+        $("#nombres").val("{{usuario.persona.nombres}}");
+        $("#fecha_nacimiento").val("{{usuario.persona.fecha_nacimiento}}");
+        $("#edad").val("{{usuario.persona.edad}}");
+        $("#telefono").val("{{usuario.persona.telefono}}");
+        $("#direccion").val("{{usuario.persona.direccion}}");
+    });
+</script>
+<!------ Include the above in your HEAD tag ---------->
+<link href="../stylesheets/perfil.css" rel="stylesheet" type="text/css"/>
+<div class="container emp-profile">
+    {{#if msg}}
+    {{#if  msg.error}}
+    <center>
+        <label style="background: #FE2E2E">{{ msg.error}}</label>
+    </center>
+    {{/if}}
+    {{#if msg.info}}
+    <center>
+        <label style="background: #04B431">{{ msg.info}}</label>
+    </center>
+    {{/if}}
+    {{/if}}
+    <form method="post">
+        <div class="row">
+            <div class="col-md-4" >
+                <div class="profile-img">
+                    <img style="width: 50%;height: 20%" src="/images/gallery/{{usuario.persona.foto}}" class="user-image blog_post_img" alt="User Image">
+
+
+                    <a style="width: 50%" class="file btn btn-lg btn-primary" href="#" data-toggle="modal" data-target="#exampleModal_foto" data-whatever="@mdo"> <i class = " fa fa-user "> </i> Foto </a>
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+
+                    <h5>
+
+                        <label>{{usuario.persona.nombres}}  {{usuario.persona.apellidos}} </label>
+
+                    </h5>
+                    <h6>
+                        <label>{{usuario.persona.rol.nombre}} </label>
+                    </h6>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Informacion Personal</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Informacion Detallada</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-4"  style="text-align: center">
+                <div class="profile-work">
+
+                    <a  class="btn btn-success profile-edit-btn"  href="#"  style="background: #04B431" data-placement="top" data-toggle="modal" data-target="#Persona" onclick="">Editar Perfil</a>
+
+                    <div class="profile-work">
+                        <p class="copyright color-text-a">@SistemaHomologacion</p>
+                        <p>Redes sociales</p>
+
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a href="#">
+                                    <i class="fa fa-facebook" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#">
+                                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#">
+                                    <i class="fa fa-instagram" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#">
+                                    <i class="fa fa-pinterest-p" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#">
+                                    <i class="fa fa-dribbble" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-md-7">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Cedula</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p><label>{{usuario.persona.cedula}}</label></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Fecha de Nacimiento</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p><label>{{usuario.persona.fecha_nacimiento}}</label></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Edad</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p><label>{{usuario.persona.edad}}</label></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Correo</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p><label>{{usuario.correo}}</label></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Telefono</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{usuario.persona.telefono}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Titulo</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>Ingeniero en Sistemas</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Experiencia</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>Expert</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Horas de Cursos</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>100/hr</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Total Proyectos</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>230</p>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>           
+</div>
+
+
+
+
+<!-- inicio de modal guardar foto -->
+<div class = "fade modal" id = "exampleModal_foto" tabindex = "-1" role = "dialog" aria-labelledby = "exampleModalLabel" aria-hidden = "true">
+    <div class = "modal-dialog" role = "document">
+        <div class = "modal-content" style="background: #D6D6D6">
+
+            <div class = "page-item " role = "alert" style="margin-top: 4%">
+                <center>
+                    <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Subir<span class="color-b"> Foto</span></a>
+                </center>               
+            </div>
+            <div class = "modal-header"></div>
+            <div class = "modal-body">
+                <form id = "formulario" method = "POST" enctype = "multipart/form-data" action = "/perfil/foto">
+
+                    <div class = " form-group row">
+                        <div class = "  col-sm-10">
+                            <center>
+                                <input type = "hidden" value = "{{usuario.persona.external_id}}" id = "external_foto" name = "external" />                      
+                                <input type = "file" class = "btn-lg btn-link " name = "archivo" id = "archivo">
+                            </center>
+                        </div>
+                    </div>
+
+                    <div class = "modal-footer">
+                        <button type = "button" class = "btn btn-danger col-md-6" data-dismiss = "modal"> Cancelar </button>
+                        <button type = "submit" class = "btn btn-success col-md-6"> Cargar </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin de modal guardar foto -->
+
+
+<!-- inicio modal editar perfil-->
+<div id="Persona" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-header" >
+
+                <h2 class="modal-title"> Editar Perfil de Usuario </h2> 
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="form_registro" name="form_registro" method="POST" action="/perfil/editar" style="color: white">
+                    <center>
+                        <label style="background: #FE2E2E">Datos Generales</label>
+                        <br>
+
+                    </center>
+                    <br>
+                    <div class="form-group row">
+                        <input  value="{{usuario.persona.external_id}} " id="external" name="external" type="hidden">
+
+                        <div class="input-group form-group col-sm-12">
+                            <label class="col-sm-12" style="color: #000">Cedula:</label>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input  id="cedula" name="cedula" type="text" class="form-control" placeholder="Cedula" readonly>
+                        </div>   
+                    </div>
+                    <div class="form-group row"> 
+                        <div class="input-group form-group col-sm-6">
+                            <label class="col-sm-12" style="color: #000">Apellidos:</label>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input id="apellidos" name="apellidos" type="text" class="form-control" placeholder="Apellidos ">
+
+                        </div>
+                        <div class="input-group form-group col-sm-6">
+                            <label class="col-sm-12" style="color: #000">Nombres:</label>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input id="nombres" name="nombres" type="text" class="form-control" placeholder="Nombres ">
+
+                        </div>
+                    </div>
+                    <div class="form-group row"> 
+                        <div class="input-group form-group col-sm-6">
+                            <label class="col-sm-12" style="color: #000">F. Nacimiento:</label>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input  id="fecha_nacimiento" name="fecha_nacimiento" type="date" class="form-control" placeholder="Fecha de Nacimiento ">
+                        </div>                  
+                        <div class="input-group form-group col-sm-6">
+                            <label class="col-sm-12" style="color: #000">Edad:</label>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input  id="edad" name="edad" type="text" class="form-control" placeholder="Edad " readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row"> 
+                        <div class="input-group form-group col-sm-6">
+                            <label class="col-sm-12" style="color: #000">Telefono:</label>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input  id="telefono" name="telefono" type="text" class="form-control" placeholder="Telefono ">
+
+                        </div>
+                        <div class="input-group form-group col-sm-6">
+                            <label class="col-sm-12" style="color: #000">Direccion:</label>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input id="direccion" name="direccion" type="text" class="form-control" placeholder="Direccion">
+
+                        </div>
+                    </div>                         
+                    <div class="form-group">
+                        <div class="modal-footer "> 
+                            <button type="submit" class="btn btn-success col-md-6" >Guardar</button>
+                            <button type="button" class="btn btn-danger col-md-6"  data-dismiss="modal" >Cerrar</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!--fin modal editar perfil-->
+{% endblock %}
