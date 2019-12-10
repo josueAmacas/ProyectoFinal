@@ -1,4 +1,6 @@
 from django.shortcuts import render,redirect
+from django.http import HttpResponse, JsonResponse
+import json
 from .forms import FormularioPersona, FormularioCuenta
 from apps.modelo.models import Persona,Cuenta
 from django.contrib import messages
@@ -45,3 +47,10 @@ def registro(request):
 	}
 	return render (request, 'login/frm_registro.html', context)
 
+def cuentaUnica(request):
+	
+	dni = request.GET["cedula"]
+	data ={
+		Persona.objects.filter(cedula_iexact=cedula).exists()
+	}
+	return JsonResponse( data )

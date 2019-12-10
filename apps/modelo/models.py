@@ -7,10 +7,13 @@ class Carrera(models.Model):
 	nombre = models.CharField(max_length=50, null=False)
 	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
 
+	def __str__(self):
+		return '{}'.format(self.nombre)
+
 class MallaCurricular(models.Model):
 	mallaCurricular_id = models.AutoField(primary_key = True)
 	archivo = models.CharField(max_length=200, null= False)
-	anio =  models.DateField(auto_now = False, auto_now_add = False, null = False)
+	anio =  models.CharField(max_length = 5, null = False)
 	estado = models.BooleanField(default =True)
 	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
 	carrera = models.ForeignKey(
