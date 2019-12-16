@@ -25,18 +25,15 @@
                 <div class=" table-responsive " style="margin-top: 10%;background: #e5e5e5">           
 
                     <center>
-                        {{#if msg}}
-                        {{#if  msg.error}}
-                        <center>
-                            <label style="background: #FE2E2E">{{ msg.error}}</label>
+                       
+                       <center>
+                            <label style="background: #FE2E2E"> </label>
                         </center>
-                        {{/if}}
-                        {{#if msg.info}}
-                        <center>
-                            <label style="background: #04B431">{{ msg.info}}</label>
+                       
+                       <center>
+                            <label style="background: #04B431"> </label>
                         </center>
-                        {{/if}}
-                        {{/if}}
+                        
                         <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Lista d<span class="color-b">e Silabos</span></a>
 
                         <br>
@@ -55,24 +52,24 @@
 
                         <tbody style="text-align: center">
 
-                            {{#each Silabo  as |silabo i|}}
+                            
                             <tr>
-                                <td> {{i}}   </td>
+                                <td>   </td>
                                 <td>  
 
                                     <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{silabo.docente.persona.foto}}" width = "40" /> </a>
                                 </td>
-                                <td>{{silabo.docente.persona.nombres}} {{silabo.docente.persona.apellidos}}</td>
-                                <td> Desde: {{silabo.periodoAcademico.fechaInicio}} Hasta: {{silabo.periodoAcademico.fechaFin}} </td>
-                                <td> {{silabo.materium.nombre}}   </td>
+                                <td> </td>
+                                <td> Desde:   Hasta:   </td>
+                                <td>  </td>
                                 <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
 
-                                {{#if  silabo.estado}}
+                                 
                                 <td><a  id="{{i}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Activo</span></a>
 
-                                    {{else}}
+                                     
                                 <td><a id="{{i}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactivo</span></a>
-                                    {{/if}}
+                                     
                             </tr>
                         <script>
                             $("#{{i}}").click(function () {
@@ -84,8 +81,7 @@
                                 PDF("{{silabo.external_id}}");
                             });
                         </script>
-                        {{/each}}
-
+                         
 
                         </tbody>
 
@@ -146,7 +142,7 @@
 
             <div class="card" >
                 <div class="card-header " >
-                    <a type="button" class="btn btn-danger col-md-12" href="/lista/silabos">Cerrar</a>
+                    <a type="button" class="btn btn-danger col-md-12" href="/silabo/silaboDecano">Cerrar</a>
 
                     <div id="pdf">           
 

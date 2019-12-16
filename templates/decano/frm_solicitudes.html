@@ -17,18 +17,15 @@
                     <div class="table-responsive" style="background: #e5e5e5">           
 
                         <center>
-                            {{#if msg}}
-                            {{#if  msg.error}}
-                            <center>
-                                <label style="background: #FE2E2E">{{ msg.error}}</label>
+                           
+                           <center>
+                                <label style="background: #FE2E2E"> </label>
                             </center>
-                            {{/if}}
-                            {{#if msg.info}}
-                            <center>
-                                <label style="background: #04B431">{{ msg.info}}</label>
+                           
+                           <center>
+                                <label style="background: #04B431"> </label>
                             </center>
-                            {{/if}}
-                            {{/if}}
+                            
                             <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Lista d<span class="color-b">e Solicitudes</span></a>
 
                             <br>
@@ -49,27 +46,27 @@
 
                             <tbody style="text-align: center">
 
-                                {{#each this.Solicitud  as |Solicitud i|}}
-                                <tr>
-                                    <td>{{i}}</td>
+                              
+                              <tr>
+                                    <td> </td>
                                     <td>  
 
                                         <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{Solicitud.foto}}" width = "40" /> </a>
 
                                     </td>
-                                    <td>{{Solicitud.solicitante}}</td> 
-                                    <td>{{Solicitud.cedula}}</td> 
-                                    <td>{{Solicitud.registro}}</td>
-                                    <td>{{Solicitud.tipo}}</td>
+                                    <td> </td> 
+                                    <td> </td> 
+                                    <td> </td>
+                                    <td> </td>
 
-                                    <td>{{Solicitud.carrera}}</td> 
+                                    <td> </td> 
                                     <td> <a   href="/upload/archivos/{{Solicitud.archivo}}"> <img class = "rounded" src = "/images/icons/archivo.png" width = "40" /> </a></td>
-                                    {{#if  Solicitud.estado}}
+                                     
                                     <td><a  id="{{i}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">Sumillada</span></a>
 
-                                        {{else}}
+                                       
                                     <td><a  id="{{i}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">En espera</span></a>
-                                        {{/if}}
+                                       
                                 </tr>
 
                             <script>
@@ -84,7 +81,7 @@
 
                             </script>
 
-                            {{/each}}
+                           
 
                             </tbody>
 

@@ -15,18 +15,15 @@
                     <div class="table-responsive table table-hover" style="margin-top: 10%;background: #e5e5e5">           
 
                         <center>
-                            {{#if msg}}
-                            {{#if  msg.error}}
+                            
                             <center>
-                                <label style="background: #FE2E2E">{{ msg.error}}</label>
+                                <label style="background: #FE2E2E"> </label>
                             </center>
-                            {{/if}}
-                            {{#if msg.info}}
+                            
                             <center>
-                                <label style="background: #04B431">{{ msg.info}}</label>
+                                <label style="background: #04B431"> </label>
                             </center>
-                            {{/if}}
-                            {{/if}}
+                            
                             <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Lista d<span class="color-b">e Seguimientos</span></a>
                             <br>
                         </center>
@@ -44,44 +41,40 @@
 
                             <tbody style="text-align: center">
 
-                                {{#each this.Seguimiento  as |Seguimiento i|}}
+                                 
                                 <tr>
-                                    <th>{{i}}</th> 
+                                    <th> </th> 
 
-                                    <th>{{Seguimiento.registro}}</th>  
-                                    {{#if  Seguimiento.revSolicitud}}
+                                    <th> </th>  
+                                     
                                     <th  style="background: #FFC312">Revisado</th>
 
-                                    {{else}}
+                                     
                                     <th  style="background: #FE2E2E">En Espera</th>                    
-                                    {{/if}}
-                                    {{#if  Seguimiento.revSellos}}
+                                    
                                     <th  style="background: #FFC312">Revisado</th>
 
-                                    {{else}}
+                                    
                                     <th  style="background: #FE2E2E">En Espera</th>                    
-                                    {{/if}}
-                                    {{#if  Seguimiento.asigDocente}}
-                                    <th  style="background: #FFC312">{{Seguimiento.docente}}</th>
+                                     
+                                    <th  style="background: #FFC312"> </th>
 
-                                    {{else}}
+                                     
                                     <th  style="background: #FE2E2E">No Asignado</th>                    
-                                    {{/if}}
-                                    {{#if  Seguimiento.revDocumentacion}}
+                                 
                                     <th  style="background: #FFC312">Revisado</th>
 
-                                    {{else}}
+                                   
                                     <th  style="background: #FE2E2E">En Espera</th>                    
-                                    {{/if}}
-                                    {{#if  Seguimiento.estado}}
+                                    
                                     <th  style="background: #FFC312">Aceptado</th>
 
-                                    {{else}}
+                                     
                                     <th  style="background: #FE2E2E">No Admitido</th>                    
-                                    {{/if}}
+                                    
 
                                 </tr>
-                                {{/each }}                        
+                                                  
 
                             </tbody>
 

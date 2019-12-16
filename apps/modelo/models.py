@@ -3,8 +3,8 @@ from django.db import models
 
 class Carrera(models.Model):
 	carrera_id = models.AutoField(primary_key = True)
-	area = models.CharField(max_length=150, null=False)
-	nombre = models.CharField(max_length=50, null=False)
+	area = models.CharField(max_length=200, null=False)
+	nombre = models.CharField(max_length=200, null=False)
 	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
 
 	def __str__(self):
@@ -24,7 +24,7 @@ class MallaCurricular(models.Model):
 class Ciclo(models.Model):
 	ciclo_id = models.AutoField(primary_key = True)
 	numero = models.CharField(max_length = 3, null = False)
-	nombre = models.CharField(max_length = 50, null = False)
+	nombre = models.CharField(max_length = 200, null = False)
 	mallaCurricular = models.ForeignKey(
 		'MallaCurricular', 
 		on_delete = models.CASCADE,
@@ -32,11 +32,11 @@ class Ciclo(models.Model):
 
 class Materia(models.Model):
 	materia_id = models.AutoField(primary_key = True)
-	nombre = models.CharField(max_length=50, null=False)
+	nombre = models.CharField(max_length=200, null=False)
 	creditos = models.CharField(max_length=10, null=False)
 	codigo = models.CharField(max_length=50, null=False)
 	duracion = models.CharField(max_length=10, null=False)
-	obligatoria = models.CharField(max_length=10, null=False)
+	obligatoria = models.BooleanField(default =True)
 	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
 	ciclo = models.ForeignKey(
 		'Ciclo', 
@@ -67,11 +67,11 @@ class Rol(models.Model):
 class Persona(models.Model):
 	persona_id = models.AutoField(primary_key = True)
 	cedula = models.CharField(max_length=10, unique = True, null=False)
-	apellidos = models.CharField(max_length=50, null=False)
-	nombres = models.CharField(max_length=50, null=False)
+	apellidos = models.CharField(max_length=200, null=False)
+	nombres = models.CharField(max_length=200, null=False)
 	edad = models.CharField(max_length=3, null=False)
 	fechaNacimiento =  models.DateField(auto_now = False, auto_now_add = False, null = False)
-	direccion = models.TextField(max_length=50, default= 'sin direccion')
+	direccion = models.TextField(max_length=200, default= 'sin direccion')
 	telefono = models.CharField(max_length=13)
 	foto = models.CharField(max_length=200)
 	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
@@ -82,8 +82,8 @@ class Persona(models.Model):
 
 class Docente(models.Model):
 	docente_id = models.AutoField(primary_key = True)
-	titulo = models.CharField(max_length=50, null=False)
-	carrera = models.CharField(max_length=50, null=False)
+	titulo = models.CharField(max_length=200, null=False)
+	carrera = models.CharField(max_length=200, null=False)
 	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
 	persona = models.ForeignKey(
 		'Persona', 

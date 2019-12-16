@@ -13,19 +13,13 @@
                     <!-- Trigger the modal with a button -->
                     <div class="table-responsive" style="background: #e5e5e5">           
                         <center>
-                            {{#if msg}}
-                            {{#if  msg.error}}
                             <center>
-                                <label style="background: #FE2E2E">{{ msg.error}}</label>
+                                <label style="background: #FE2E2E"> </label>
                             </center>
-                            {{/if}}
-                            {{#if msg.info}}
                             <center>
-                                <label style="background: #04B431">{{ msg.info}}</label>
+                                <label style="background: #04B431"> </label>
                             </center>
-                            {{/if}}
-                            {{/if}}
-
+                            
                             <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Lista d<span class="color-b">e Tramites</span></a>
                             <br>                           
                         </center>
@@ -49,34 +43,34 @@
                             </thead>
 
                             <tbody style="text-align: center">
-                                {{#each this.Tramite  as |Tramite i|}}
+                                
                                 <tr>
-                                    <td>{{i}}</td>
-                                    <td  class="navbar-brand " style="font-size: 100%">{{Tramite.carrera}}</td> 
+                                    <td></td>
+                                    <td  class="navbar-brand " style="font-size: 100%"></td> 
                                     <td>  
 
                                         <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{Tramite.foto}}" width = "40" /> </a>
 
                                     </td>
-                                    <td>{{Tramite.solicitante}}</td> 
-                                    <td>{{Tramite.registro}}</td> 
-                                    <td>{{Tramite.tipo}}</td>
+                                    <td></td> 
+                                    <td></td> 
+                                    <td></td>
                                     <td>  
 
                                         <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{Tramite.fotD}}" width = "40" /> </a>
 
                                     </td>
-                                    <td>{{Tramite.docente}}</td> 
+                                    <td></td> 
 
                                     <td>  <a href="/upload/archivos/{{Tramite.archivo}}"> <img class = "rounded" src = "/images/icons/archivo.png" width = "40" /> </a></td>
                                     <td>  <a href="/upload/informesContenido/{{Tramite.informe}}"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
 
-                                    {{#if  Tramite.estado}}
+                                     
                                     <td><a id="{{i}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Aceptado</span></a>
 
-                                        {{else}}
+                                       
                                     <td><a id="{{i}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">En Espera</span></a>
-                                        {{/if}}
+                                      
                                 </tr>
 
                             <script>
@@ -90,7 +84,7 @@
 
                             </script>
 
-                            {{/each}}
+                         
 
                             </tbody>
 

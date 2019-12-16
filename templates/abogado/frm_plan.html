@@ -3,8 +3,8 @@
 {% block titulo %}Sistema Homologacion{% endblock %}
 {% block content %}
 <script>
-     function PDF(txt) {
-        var html = '<div class="embed-responsive" style="padding-bottom:70%">';
+    function PDF(txt) {
+        var html = '<div class="embed-responsive" style="padding-bottom:85%">';
         html += '<object data="/upload/silabos/' + txt + '.pdf" type="application/pdf" width="100%" height="100%"></object>';
         html += '</div>';
         $("#pdf").html(html);
@@ -24,30 +24,26 @@
 
                 <div class="table-responsive" style="margin-top: 10%;background: #e5e5e5">           
                     <center>
-                        {{#if msg}}
-                        {{#if  msg.error}}
-                        <center>
-                            <label style="background: #FE2E2E">{{ msg.error}}</label>
+                       
+                       <center>
+                            <label style="background: #FE2E2E"> </label>
                         </center>
-                        {{/if}}
-                        {{#if msg.info}}
+                        
                         <center>
-                            <label style="background: #04B431">{{ msg.info}}</label>
+                            <label style="background: #04B431"> </label>
                         </center>
-                        {{/if}}
-                        {{/if}}
-                        <a class="navbar-brand text-brand " href="#" style="font-size: 200%">{{Carrera.area}}</a>
+                        
+                        <a class="navbar-brand text-brand " href="#" style="font-size: 200%"> {{carrera.area}} </a>
                         <br>
-                        <a class="navbar-brand text-brand" href="#" style="font-size: 150%">{{Carrera.nombre}}</a>
+                        <a class="navbar-brand text-brand" href="#" style="font-size: 150%"> {{carrera.nombre}} </a>
                         <br>
-                        <a class="navbar-brand text-brand" href="#" style="font-size: 100%">Malla <span class="color-b"> Curricular {{Malla.anio}}</span></a>
+                        <a class="navbar-brand text-brand" href="#" style="font-size: 100%">Malla <span class="color-b"> Curricular  {{malla.anio}} </span></a>
                         <br>
-                        {{#if   Malla.estado}}
+                        {% if malla.estado %} 
                         <td><a  class="btn btn-success "  href="#"  style="background: #26a356;width: 100%"><span class="glyphicon glyphicon-pencil">Activa</span></a>
-
-                            {{else}}
+                        {% else %}
                         <td><a class="btn btn-success "  href="#"  style="background: #FE2E2E;width: 100%"><span class="glyphicon glyphicon-pencil">Inactiva</span></a>
-                            {{/if}}
+                        {% endif %}
                     </center>
 
                     <table id="malla" class="table table-border table-responsive " >
@@ -77,9 +73,10 @@
                             </tr>
                         </thead>
                         <tbody style="text-align: center">
+                            
                             <tr>
                                 <th>Ciclo I </th>
-                                <th>{{Nombre1}}</th> 
+                                <th> {{n1.nombre}} </th> 
                             </tr>
                             <tr style="background: #228a47">
                                 <th>#</th> 
@@ -91,28 +88,26 @@
                                 <th>Silabo Actual</th>
 
                             </tr>
-                            {{#each this.Ciclo1  as |ciclo i|}}
+                            {% for c in ciclo1%} 
                             <tr style="background: #FFC312">
-                                <th>{{i}}</th> 
-
-                                <th>{{ciclo.codigo}}</th>  
-                                <th>{{ciclo.nombre}}</th>
-                                <th>{{ciclo.creditos}}</th>
-                                <th>{{ciclo.duracion}}</th>
-                                <th>{{ciclo.obligatoria}}</th>
-                                <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                                <th>{{c.materia_id}}</th> 
+                                <th>{{c.codigo}}</th>  
+                                <th>{{c.nombre}}</th>
+                                <th>{{c.creditos}}</th>
+                                <th>{{c.duracion}}</th>
+                                <th>{{c.obligatoria}}</th>
+                                <td>  <a  id="a{{c.materia_id}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
                         <script>
 
-                            $("#b{{i}}").click(function () {
+                            $("#a{{c.materia_id}}").click(function () {
                                 PDF("{{ciclo.silabo.external_id}}");
                             });
                         </script>
-
                         </tr>
-                        {{/each }}
+                       {% endfor %}
                         <tr>
                             <th>Ciclo II </th>
-                            <th>{{Nombre2}}</th> 
+                            <th>{{n2.nombre}}</th> 
                         </tr>
                         <tr style="background: #228a47">
                             <th>#</th> 
@@ -124,28 +119,26 @@
                             <th>Silabo Actual</th>
 
                         </tr>
-                        {{#each this.Ciclo2  as |ciclo i|}}
+                        {% for c in ciclo2%} 
                         <tr style="background: #FFC312">
-                            <th>{{i}}</th> 
-
-                            <th>{{ciclo.codigo}}</th>  
-                            <th>{{ciclo.nombre}}</th>
-                            <th>{{ciclo.creditos}}</th>
-                            <th>{{ciclo.duracion}}</th>
-                            <th>{{ciclo.obligatoria}}</th>
-                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                             <th>{{c.materia_id}}</th> 
+                                <th>{{c.codigo}}</th>  
+                                <th>{{c.nombre}}</th>
+                                <th>{{c.creditos}}</th>
+                                <th>{{c.duracion}}</th>
+                                <th>{{c.obligatoria}}</th>
+                            <td>  <a  id="b{{c.materia_id}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
                         <script>
 
-                            $("#b{{i}}").click(function () {
+                            $("#b{{c.materia_id}}").click(function () {
                                 PDF("{{ciclo.silabo.external_id}}");
                             });
                         </script>
-
                         </tr>
-                        {{/each }}
+                        {% endfor %}
                         <tr>
                             <th>Ciclo III </th>
-                            <th>{{Nombr31}}</th> 
+                            <th>{{n3.nombre}}</th> 
                         </tr>
                         <tr style="background: #228a47">
                             <th>#</th> 
@@ -157,28 +150,26 @@
                             <th>Silabo Actual</th>
 
                         </tr>
-                        {{#each this.Ciclo3  as |ciclo i|}}
+                        {% for c in ciclo3%} 
                         <tr style="background: #FFC312">
-                            <th>{{i}}</th> 
-
-                            <th>{{ciclo.codigo}}</th>  
-                            <th>{{ciclo.nombre}}</th>
-                            <th>{{ciclo.creditos}}</th>
-                            <th>{{ciclo.duracion}}</th>
-                            <th>{{ciclo.obligatoria}}</th>
-                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                             <th>{{c.materia_id}}</th> 
+                                <th>{{c.codigo}}</th>  
+                                <th>{{c.nombre}}</th>
+                                <th>{{c.creditos}}</th>
+                                <th>{{c.duracion}}</th>
+                                <th>{{c.obligatoria}}</th>
+                            <td>  <a  id="c{{c.materia_id}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
                         <script>
 
-                            $("#b{{i}}").click(function () {
+                            $("#c{{c.materia_id}}").click(function () {
                                 PDF("{{ciclo.silabo.external_id}}");
                             });
                         </script>
-
                         </tr>
-                        {{/each }}
+                        {% endfor %}
                         <tr>
                             <th>Ciclo IV </th>
-                            <th>{{Nombre4}}</th> 
+                            <th><{{n4.nombre}}/th> 
                         </tr>
                         <tr style="background: #228a47">
                             <th>#</th> 
@@ -190,28 +181,26 @@
                             <th>Silabo Actual</th>
 
                         </tr>
-                        {{#each this.Ciclo4  as |ciclo i|}}
+                        {% for c in ciclo4%} 
                         <tr style="background: #FFC312">
-                            <th>{{i}}</th> 
-
-                            <th>{{ciclo.codigo}}</th>  
-                            <th>{{ciclo.nombre}}</th>
-                            <th>{{ciclo.creditos}}</th>
-                            <th>{{ciclo.duracion}}</th>
-                            <th>{{ciclo.obligatoria}}</th>
-                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                             <th>{{c.materia_id}}</th> 
+                                <th>{{c.codigo}}</th>  
+                                <th>{{c.nombre}}</th>
+                                <th>{{c.creditos}}</th>
+                                <th>{{c.duracion}}</th>
+                                <th>{{c.obligatoria}}</th>
+                            <td>  <a  id="d{{c.materia_id}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
                         <script>
 
-                            $("#b{{i}}").click(function () {
+                            $("#d{{c.materia_id}}").click(function () {
                                 PDF("{{ciclo.silabo.external_id}}");
                             });
                         </script>
 
                         </tr>
-                        {{/each }}
-                        <tr>
+                        {% endfor %}
                             <th>Ciclo V </th>
-                            <th>{{Nombre5}}</th> 
+                            <th>{{n5.nombre}}</th> 
                         </tr>
                         <tr style="background: #228a47">
                             <th>#</th> 
@@ -223,28 +212,26 @@
                             <th>Silabo Actual</th>
 
                         </tr>
-                        {{#each this.Ciclo5  as |ciclo i|}}
+                        {% for c in ciclo5%} 
                         <tr style="background: #FFC312">
-                            <th>{{i}}</th> 
-
-                            <th>{{ciclo.codigo}}</th>  
-                            <th>{{ciclo.nombre}}</th>
-                            <th>{{ciclo.creditos}}</th>
-                            <th>{{ciclo.duracion}}</th>
-                            <th>{{ciclo.obligatoria}}</th>
-                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                             <th>{{c.materia_id}}</th> 
+                                <th>{{c.codigo}}</th>  
+                                <th>{{c.nombre}}</th>
+                                <th>{{c.creditos}}</th>
+                                <th>{{c.duracion}}</th>
+                                <th>{{c.obligatoria}}</th>
+                            <td>  <a  id="e{{c.materia_id}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
                         <script>
 
-                            $("#b{{i}}").click(function () {
+                            $("#e{{c.materia_id}}").click(function () {
                                 PDF("{{ciclo.silabo.external_id}}");
                             });
                         </script>
 
                         </tr>
-                        {{/each }}
-                        <tr>
+                        {% endfor %}
                             <th>Ciclo VI </th>
-                            <th>{{Nombre6}}</th> 
+                            <th>{{n6.nombre}}</th> 
                         </tr>
                         <tr style="background: #228a47">
                             <th>#</th> 
@@ -256,28 +243,27 @@
                             <th>Silabo Actual</th>
 
                         </tr>
-                        {{#each this.Ciclo6  as |ciclo i|}}
+                       {% for c in ciclo6%} 
                         <tr style="background: #FFC312">
-                            <th>{{i}}</th> 
-
-                            <th>{{ciclo.codigo}}</th>  
-                            <th>{{ciclo.nombre}}</th>
-                            <th>{{ciclo.creditos}}</th>
-                            <th>{{ciclo.duracion}}</th>
-                            <th>{{ciclo.obligatoria}}</th>
-                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                             <th>{{c.materia_id}}</th> 
+                                <th>{{c.codigo}}</th>  
+                                <th>{{c.nombre}}</th>
+                                <th>{{c.creditos}}</th>
+                                <th>{{c.duracion}}</th>
+                                <th>{{c.obligatoria}}</th>
+                            <td>  <a  id="f{{c.materia_id}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
                         <script>
 
-                            $("#b{{i}}").click(function () {
+                            $("#f{{c.materia_id}}").click(function () {
                                 PDF("{{ciclo.silabo.external_id}}");
                             });
                         </script>
 
                         </tr>
-                        {{/each }}
+                        {% endfor %}
                         <tr>
                             <th>Ciclo VII </th>
-                            <th>{{Nombre7}}</th> 
+                            <th>{{n7.nombre}}</th> 
                         </tr>
                         <tr style="background: #228a47">
                             <th>#</th> 
@@ -289,28 +275,27 @@
                             <th>Silabo Actual</th>
 
                         </tr>
-                        {{#each this.Ciclo7  as |ciclo i|}}
+                        {% for c in ciclo7%} 
                         <tr style="background: #FFC312">
-                            <th>{{i}}</th> 
-
-                            <th>{{ciclo.codigo}}</th>  
-                            <th>{{ciclo.nombre}}</th>
-                            <th>{{ciclo.creditos}}</th>
-                            <th>{{ciclo.duracion}}</th>
-                            <th>{{ciclo.obligatoria}}</th>
-                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                             <th>{{c.materia_id}}</th> 
+                                <th>{{c.codigo}}</th>  
+                                <th>{{c.nombre}}</th>
+                                <th>{{c.creditos}}</th>
+                                <th>{{c.duracion}}</th>
+                                <th>{{c.obligatoria}}</th>
+                            <td>  <a  id="g{{c.materia_id}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
                         <script>
 
-                            $("#b{{i}}").click(function () {
+                            $("#g{{c.materia_id}}").click(function () {
                                 PDF("{{ciclo.silabo.external_id}}");
                             });
                         </script>
 
                         </tr>
-                        {{/each }}
+                        {% endfor %}
                         <tr>
                             <th>Ciclo VIII </th>
-                            <th>{{Nombre8}}</th> 
+                            <th>{{n8.nombre}}</th> 
                         </tr>
                         <tr style="background: #228a47">
                             <th>#</th> 
@@ -322,28 +307,27 @@
                             <th>Silabo Actual</th>
 
                         </tr>
-                        {{#each this.Ciclo8  as |ciclo i|}}
+                        {% for c in ciclo8%} 
                         <tr style="background: #FFC312">
-                            <th>{{i}}</th> 
-
-                            <th>{{ciclo.codigo}}</th>  
-                            <th>{{ciclo.nombre}}</th>
-                            <th>{{ciclo.creditos}}</th>
-                            <th>{{ciclo.duracion}}</th>
-                            <th>{{ciclo.obligatoria}}</th>
-                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                             <th>{{c.materia_id}}</th> 
+                                <th>{{c.codigo}}</th>  
+                                <th>{{c.nombre}}</th>
+                                <th>{{c.creditos}}</th>
+                                <th>{{c.duracion}}</th>
+                                <th>{{c.obligatoria}}</th>
+                            <td>  <a  id="h{{c.materia_id}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
                         <script>
 
-                            $("#b{{i}}").click(function () {
+                            $("#h{{c.materia_id}}").click(function () {
                                 PDF("{{ciclo.silabo.external_id}}");
                             });
                         </script>
 
                         </tr>
-                        {{/each }}
+                        {% endfor %}
                         <tr>
                             <th>Ciclo IX </th>
-                            <th>{{Nombre9}}</th> 
+                            <th>{{n9.nombre}}</th> 
                         </tr>
                         <tr style="background: #228a47">
                             <th>#</th> 
@@ -355,28 +339,27 @@
                             <th>Silabo Actual</th>
 
                         </tr>
-                        {{#each this.Ciclo9  as |ciclo i|}}
+                         {% for c in ciclo9%} 
                         <tr style="background: #FFC312">
-                            <th>{{i}}</th> 
-
-                            <th>{{ciclo.codigo}}</th>  
-                            <th>{{ciclo.nombre}}</th>
-                            <th>{{ciclo.creditos}}</th>
-                            <th>{{ciclo.duracion}}</th>
-                            <th>{{ciclo.obligatoria}}</th>
-                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                             <th>{{c.materia_id}}</th> 
+                                <th>{{c.codigo}}</th>  
+                                <th>{{c.nombre}}</th>
+                                <th>{{c.creditos}}</th>
+                                <th>{{c.duracion}}</th>
+                                <th>{{c.obligatoria}}</th>
+                            <td>  <a  id="i{{c.materia_id}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
                         <script>
 
-                            $("#b{{i}}").click(function () {
+                            $("#i{{c.materia_id}}").click(function () {
                                 PDF("{{ciclo.silabo.external_id}}");
                             });
                         </script>
 
                         </tr>
-                        {{/each }}
+                        {% endfor %}
                         <tr>
                             <th>Ciclo X </th>
-                            <th>{{Nombre10}}</th> 
+                            <th>{{n10.nombre}}</th> 
                         </tr>
                         <tr style="background: #228a47">
                             <th>#</th> 
@@ -388,26 +371,24 @@
                             <th>Silabo Actual</th>
 
                         </tr>
-                        {{#each this.Ciclo10  as |ciclo i|}}
+                        {% for c in ciclo10%} 
                         <tr style="background: #FFC312">
-                            <th>{{i}}</th> 
-
-                            <th>{{ciclo.codigo}}</th>  
-                            <th>{{ciclo.nombre}}</th>
-                            <th>{{ciclo.creditos}}</th>
-                            <th>{{ciclo.duracion}}</th>
-                            <th>{{ciclo.obligatoria}}</th>
-                            <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                             <th>{{c.materia_id}}</th> 
+                                <th>{{c.codigo}}</th>  
+                                <th>{{c.nombre}}</th>
+                                <th>{{c.creditos}}</th>
+                                <th>{{c.duracion}}</th>
+                                <th>{{c.obligatoria}}</th>
+                            <td>  <a  id="j{{c.materia_id}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
                         <script>
 
-                            $("#b{{i}}").click(function () {
+                            $("#j{{c.materia_id}}").click(function () {
                                 PDF("{{ciclo.silabo.external_id}}");
                             });
                         </script>
 
                         </tr>
-                        {{/each }}
-
+                       {% endfor %}
                         </tbody>
 
 

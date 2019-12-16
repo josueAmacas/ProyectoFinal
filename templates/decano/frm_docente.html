@@ -3,9 +3,63 @@
 {% block titulo %}Sistema Homologacion{% endblock %}
 {% block content %}
 <script>
+    $(function () {
+        $.validator.addMethod("cedula", function (value, element) {
+            return this.optional(element) || validarCedula(value);
+        }, "Ingrese una cedula valida ");
+        $("#estado").validate({
+            rules: {
+                cedula: {
+                    required: true,
+                    number: true,
+                    cedula: true,
+                    minlength: 10,
+                    maxlength: 10
+                },
+                titulo: {
+                    required: true
+                }
+            }
+        });
+    });
+
+    function cargarPersona(txtCedula) {
+        $.ajax({
+            url: '/lista/docente/API/' + txtCedula,
+            type: 'GET',
+            dataType: 'JSON',
+            success: function (data, textStatus, jqXHR) {
+                var html = "";
+                if (data === true) {
+                    html += '<label style="background: #FE2E2E">El Docente ya esta registrado</label>';
+                    $("#mensaje").html(html);
+                    $('#cedula').val("")
+                } else {
+                    html += '<input type="hidden" value="' + data.persona.external_id + '" id="external" name="external"/>';
+                    html += ' <center><img class = "rounded" src = "/images/gallery/' + data.persona.foto + '" width = "90" /></center> <br>';
+                    html += ' <label>Docente:</label>';
+                    html += ' <input type="text" class="form-control" id="cedula"  value="' + data.persona.nombres + " " + data.persona.apellidos + '" readonly/>';
+                    html += ' <label>Titulo:</label>';
+                    html += ' <input type="text" class="form-control" id="titulo"  name="titulo"/><br>';
+                    html += ' <label>Carrera:</label>';
+                    html += ' <select class="form-control" id="carrera"  name="carrera">';
+                    html += ' ';
+                    html += '<option value="{{Carrera.external_id}}">{{Carrera.nombre}}</option>';
+                    html += '';
+                    html += '</select>';
+                    $("#usuario").html(html);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+            }
+        }
+        );
+    }
+
     function cargarDocente(txt) {
         $.ajax({
-            url: '/cargar/docente/API2/' + txt,
+            url: '/cargar/docente/API/' + txt,
             type: 'GET',
             dataType: 'JSON',
             success: function (data, textStatus, jqXHR) {
@@ -14,112 +68,111 @@
                 html += ' <label>Docente:</label>';
                 html += ' <input type="text" class="form-control" id="cedula"  value="' + data.persona.nombres + " " + data.persona.apellidos + '" readonly/>';
                 html += ' <label>Titulo:</label>';
-                html += ' <input type="text" value="' + data.titulo + '" class="form-control" id="titulo"  name="titulo" readonly/>';
-                html += ' <input type="hidden" value="' + data.external_id + '" class="form-control" id="externalD"  name="externalD" readonly/>';
-                $("#docente").html(html);
-
+                html += ' <input type="text" value="' + data.titulo + '" class="form-control" id="titulo"  name="titulo"/>';
+                html += ' <label>Carrera:</label>';
+                html += ' <select class="form-control" id="carrera"  name="carrera">';
+                html += ' ';
+                html += '<option value="{{Carrera.external_id}}">{{Carrera.nombre}}</option>';
+                html += ' ';
+                html += '</select>';
+                $("#usuario").html(html);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText);
             }
         });
     }
-    $(document).ready(function () {
 
+    $(document).ready(function () {
         $("#cedula").keyup(function () {
             var txt = $("#cedula").val();
             if (txt.length === 10) {
-                cargarDocente(txt);
+                cargarPersona(txt);
             } else {
-                $("#docente").html("");
+                $("#usuario").html("");
             }
         });
     });
+
+    function borrar() {
+        $("#externalD").val("0");
+        $("#cedula").val("");
+        $("#usuario").html("");
+        $('#cedula').attr('readonly', false);
+    }
+
 </script>
+
 <div class="card" >
-    <div class="card-header"  style="background: #bbb">
+
+    <div class="card-header " style="background: #bbb">
+
         <div class="row">
-            <div class="container" style="margin-top: 3% "> 
+
+            <div class="table-responsive" style="margin-left: 3%;margin-right: 3%" > 
                 <!-- Trigger the modal with a button -->
-                <div class="table-responsive" style="margin-top: 10%;background: #e5e5e5">               
 
+                <div class="table-responsive" style="margin-top: 8%;background: #e5e5e5">           
                     <center>
-                        {{#if msg}}
-                        {{#if  msg.error}}
+                      
                         <center>
-                            <label style="background: #FE2E2E">{{ msg.error}}</label>
+                            <label style="background: #FE2E2E"> </label>
                         </center>
-                        {{/if}}
-                        {{#if msg.info}}
+                        
                         <center>
-                            <label style="background: #04B431">{{ msg.info}}</label>
+                            <label style="background: #04B431"> </label>
                         </center>
-                        {{/if}}
-                        {{/if}}
-                        <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Asiganacion d<span class="color-b">e Docentes</span></a>
+                       
 
-
+                        <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Lista d<span class="color-b">e Docentes</span></a>
+                        <br>
+                        <a class="btn btn-success  "  href="#"  style="background: #FFC312;width: 100%" data-placement="top" data-toggle="modal" data-target="#Form"  onclick="borrar()" ><span class="glyphicon glyphicon-pencil" >Agregar Docente</span></a>
                     </center>
-                    <table id="tabla" class="table table-hover table-responsive " >
+                    <table id="tabla" class="table table-hover table-responsive  navbar-brand" style="font-size: 100%"  >
 
-                        <thead class="color-b" style="font-size: 20px;text-align: center">                                         
+                        <thead style="text-align: center" class="color-b " >                                         
                         <th>Nro</th>
                         <th>Foto</th>
                         <th>Usuario</th>
-                        <th>Cedula</th> 
-                        <th>Tramite</th>
-                        <th>Motivo</th> 
+                        <th>Cedula</th>
+                        <th>Fecha de Nacimiento</th>
+                        <th>Edad</th>
+                        <th>Telefono</th>
+                        <th>Direccion</th>
+                        <th>Titulo</th>
                         <th>Carrera</th>
-                        <th>Solicitud</th>
-                        <th>Docente</th>
+                        <th>Accion</th>
                         </thead>
 
                         <tbody style="text-align: center">
-
-                            {{#each this.Asignacion  as |Asignacion i|}}
+                            {% for d in lista %}                            
                             <tr>
-                                <td>{{i}}</td>
-                                <td>  
-
-                                    <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{Asignacion.foto}}" width = "40" /> </a>
-
+                                <td>N°- {{forloop.counter}}</td>
+                                <td> 
+                                    <a href="{% static 'images/gallery/sin_foto.jpg' %}" target="_blank"> <img class = "rounded" src = "{% static 'images/gallery/' %}{{d.persona.foto}}" width = "40" /> </a>
                                 </td>
-                                <td>{{Asignacion.solicitante}}</td> 
-                                <td>{{Asignacion.cedula}}</td> 
-                                <td>{{Asignacion.registro}}</td>
-                                <td>{{Asignacion.tipo}}</td>
+                                <td>{{d.persona.nombres}} {{d.persona.apellidos}}</td>
+                                <td>{{d.persona.cedula}}</td> 
+                                <td>{{d.persona.fechaNacimiento}}</td> 
+                                <td>{{d.persona.edad}}</td> 
+                                <td>{{d.persona.telefono}}</td> 
+                                <td>{{d.persona.direccion}}</td> 
+                                <td>{{d.titulo}}</td> 
+                                <td>{{cd.nombre}}</td>
+                                <td>
+                                    <a id="{{forloop.counter}}"class="btn btn-success  "  href="#" data-placement="top" data-toggle="modal" data-target="#Form" onclick="cargarDocente('+{{d.external_id}}+ ');"  ><span class="glyphicon glyphicon-pencil" >Editar</span></a>
 
-                                <td>{{Asignacion.carrera}}</td> 
-                                <td> <a   href="/upload/archivos/{{Asignacion.archivo}}"> <img class = "rounded" src = "/images/icons/archivo.png" width = "40" /> </a></td>
-                                {{#if  Asignacion.estado}}
-                                <td><a  id="{{i}}"  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">{{Asignacion.docente}}</span></a>
-
-                                    {{else}}
-                                <td><a  id="{{i}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">En espera</span></a>
-                                    {{/if}}
+                                </td> 
                             </tr>
-
                         <script>
-
-                            $("#{{i}}").click(function () {
-
-                                $("#registro").val("{{Asignacion.registro}}");
-                                $("#estado").val("{{Asignacion.estado}}");
-                                $("#external").val("{{Asignacion.external_id}}");
-                                $("#tramite").val("{{Asignacion.tramite}}");
-                                $("#cedula").val("{{Asignacion.cedula_docente}}");
-                                cargarDocente("{{Asignacion.cedula_docente}}");
-
+                            $("#{{forloop.counter}}").click(function () {
+                                $('#cedula').attr('readonly', true);
+                                $("#externalD").val("{{d.external_id}}");
+                                $("#cedula").val("{{d.cedula}}");
+                                cargarDocente("{{d.external_id}}");
                             });
-
                         </script>
-
-
-                        {{/each}}
-
-
-
-
+                        {% endfor %}
                         </tbody>
 
                     </table>
@@ -128,43 +181,33 @@
 
             </div>
         </div>
-    </div>
 
-</div>  
+    </div>  
+</div> 
 
-
-<div id="Form2" class="modal fade" role="dialog">
+<!-- Modal Editar Estado -->
+<div id="Form" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->
         <div class="modal-content">
+            <center>
+                <div id="mensaje"></div>
+                <div class="modal-header" >
 
-            <div class="modal-header" >
-                <center>
-                    <h2 class="modal-title" >Asiganar Docente</h2> 
-                </center>
-            </div>
-
+                    <h2 class="modal-title" style="margin-left: 20%">Agregar Docente</h2> 
+                </div>
+            </center>
             <div class="modal-body">
-                <form action="/asignar/docente" id="consultas" method="POST">
-                    <input type="hidden"  id="tramite" name="tramite"/>
-                    <input type="hidden"  id="external" name="external"/>
+                <form action="/guardar/docente" id="estado" name="estado" method="POST">
+                    <input type="hidden" value="0" id="externalD" name="externalD"/>
+
                     <div class="form-group">
-                        <label for="usuario">Tramite:</label>
-                        <input type="text" class="form-control" id="registro"  readonly="">
+                        <label for="cedula">Ingrese la Cedula del Usuario:</label>
+                        <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Cedula" maxlength="10">
                     </div>
-                    <div class="form-group">
-                        <label for="estado">Estado:</label>
-                        <select  class="form-control" id="estado"  name="estado">
-                            <option value="true">Asignar</option> 
-                            <option value="false">En espera</option>
-                        </select>
-                    </div>
-                    <div class="form-group" id="CD" >
-                        <label for='cedula'>Ingrese cedula del docente:</label>
-                        <input type='text' class='form-control' id='cedula' name='cedula' >
-                    </div>
-                    <div class="form-group" id="docente" >
+                    <div class="form-group" id="usuario">
+
                     </div>
                     <div class="modal-footer col-md-12"> 
                         <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>
@@ -177,4 +220,6 @@
 
     </div>
 </div>
+
+
 {% endblock %}

@@ -61,18 +61,15 @@
 <!------ Include the above in your HEAD tag ---------->
 <link href="../stylesheets/perfil.css" rel="stylesheet" type="text/css"/>
 <div class="container emp-profile">
-    {{#if msg}}
-    {{#if  msg.error}}
+   
     <center>
         <label style="background: #FE2E2E">{{ msg.error}}</label>
     </center>
-    {{/if}}
-    {{#if msg.info}}
     <center>
         <label style="background: #04B431">{{ msg.info}}</label>
     </center>
-    {{/if}}
-    {{/if}}
+    
+
     <form method="post">
         <div class="row">
             <div class="col-md-4" >
@@ -89,11 +86,11 @@
 
                     <h5>
 
-                        <label>{{usuario.persona.nombres}}  {{usuario.persona.apellidos}} </label>
+                        <label> Nombres </label>
 
                     </h5>
                     <h6>
-                        <label>{{usuario.persona.rol.nombre}} </label>
+                        <label>Rol</label>
                     </h6>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">

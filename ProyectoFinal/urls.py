@@ -25,4 +25,9 @@ urlpatterns = [
     path('', views.homePage),
     path('login/', include('apps.cuenta.urls')),
     path('personas/', include('apps.persona.urls')),
+    path('mallaCurricular/', include('apps.mallaCurricular.urls')),
+    path('tramite/', include('apps.tramite.urls')),
+    path('seguimiento/', include('apps.seguimiento.urls')), 
+    path('periodoAcademico/', include('apps.periodoAcademico.urls')),
+    path('silabo/', include('apps.silabo.urls')),
 ]

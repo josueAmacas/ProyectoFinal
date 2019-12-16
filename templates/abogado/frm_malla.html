@@ -15,33 +15,29 @@
     <div class="card-header " style="background: #bbb">
         <div style="background: #e5e5e5">           
             <center>
-                {{#if msg}}
-                {{#if  msg.error}}
+
                 <center>
-                    <label style="background: #FE2E2E">{{ msg.error}}</label>
+                    <label style="background: #FE2E2E"> </label>
                 </center>
-                {{/if}}
-                {{#if msg.info}}
                 <center>
-                    <label style="background: #04B431">{{ msg.info}}</label>
+                    <label style="background: #04B431"> </label>
                 </center>
-                {{/if}}
-                {{/if}}
-                <a class="navbar-brand text-brand " href="#" style="font-size: 200%">{{Carrera.area}}</a>
+
+                <a class="navbar-brand text-brand " href="#" style="font-size: 200%">{{malla.arrera.area}}</a>
                 <br>
-                <a class="navbar-brand text-brand" href="#" style="font-size: 150%">Carrera de {{Carrera.nombre}}</a>
+                <a class="navbar-brand text-brand" href="#" style="font-size: 150%">Carrera de {{malla.carrera.nombre}}</a>
                 <br>
-                <a class="navbar-brand text-brand" href="#" style="font-size: 100%">Malla <span class="color-b"> Curricular {{Malla.anio}}</span></a>
+                <a class="navbar-brand text-brand" href="#" style="font-size: 100%">Malla <span class="color-b"> Curricular {{malla.anio}}</span></a>
                 <br>
-                {{#if   Malla.estado}}
+                {% if   malla.estado %}
                 <td><a  class="btn btn-success "  href="#"  style="background: #26a356;width: 100%"><span class="glyphicon glyphicon-pencil">Activa</span></a>
 
-                    {{else}}
+                    {% else %}
                 <td><a class="btn btn-success "  href="#"  style="background: #FE2E2E;width: 100%"><span class="glyphicon glyphicon-pencil">Inactiva</span></a>
-                    {{/if}}
+                    {% endif %} 
             </center>
             <div class='embed-responsive' style='padding-bottom:70%'>
-                <object data='/upload/mallas/{{Malla.archivo}}' type='application/pdf' width='100%' height='100%'></object>
+                <object data='{% static "upload/mallas/" %}{{malla.archivo}}' type='application/pdf' width='100%' height='100%'></object>
             </div>
         </div>
     </div>  

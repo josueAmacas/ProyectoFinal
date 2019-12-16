@@ -1,5 +1,5 @@
 from django import forms
-from apps.modelo.models import Persona, Cuenta
+from apps.modelo.models import Persona, Cuenta 
 
 class DateInput(forms.DateInput):
 	input_type = 'date'

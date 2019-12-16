@@ -8,40 +8,35 @@
             var rol = $("#rols").val();
             if (rol == "3") {
                 alert(rol);
-
             }
         });
     });
 </script>
+
 <div class="card" >
-
     <div class="card-header " style="background: #bbb">
-
 
         <div class="row">
 
             <div class="table-responsive" style="margin-left: 0.5%;margin-right: 0.5%"> 
                 <!-- Trigger the modal with a button -->
 
-
                 <div class="table-responsive" style="margin-top: 6%;background: #e5e5e5">           
                     <center>
-                        {{#if msg}}
-                        {{#if  msg.error}}
+                        
                         <center>
-                            <label style="background: #FE2E2E">{{ msg.error}}</label>
+                            <label style="background: #FE2E2E"> </label>
                         </center>
-                        {{/if}}
-                        {{#if msg.info}}
+                        
                         <center>
-                            <label style="background: #04B431">{{ msg.info}}</label>
+                            <label style="background: #04B431"> </label>
                         </center>
-                        {{/if}}
-                        {{/if}}
+                         
 
                         <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Lista d<span class="color-b">e Usuarios</span></a>
                         <br>
                     </center>
+
                     <table id="tabla" class="table table-hover table-responsive navbar-brand " style="font-size: 105%">
 
                         <thead style="text-align: center" class="color-b ">                                         
@@ -59,48 +54,42 @@
                         </thead>
 
                         <tbody style="text-align: center">
-                            {{#each this.listaC  as |cuenta i|}}
+                            {% for u in lista %}
                             <tr>
-                                <td>{{i}}</td>
+                                <td> {{forloop.counter}} </td>
                                 <td>  
-
-                                    <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{cuenta.persona.foto}}" width = "40" /> </a>
-
+                                    <a href="{% static 'images/gallery/sin_foto.jpg' %}" target="_blank"> <img class = "rounded" src = "{% static 'images/gallery/' %}{{u.persona.foto}}" width = "40" /> </a>
                                 </td>
-                                <td>{{cuenta.persona.nombres}} {{cuenta.persona.apellidos}}</td>
-                                <td>{{cuenta.persona.cedula}}</td> 
-                                <td>{{cuenta.persona.fecha_nacimiento}}</td> 
-                                <td>{{cuenta.persona.edad}}</td> 
-                                <td><a id="a{{i}}"  class="btn btn-success col-md-12 " href="#"  style="margin-left: 5%;background: #2eca6a" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">{{cuenta.persona.rol.nombre}}</span></a>
-                                <td>{{cuenta.persona.telefono}}</td> 
-                                <td>{{cuenta.correo}}</td> 
-                                <td >{{cuenta.persona.direccion}}</td> 
-                                {{#if  cuenta.estado}}
-                                <td><a id="{{i}}"  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Activo</span></a>
-
-                                    {{else}}
-                                <td><a id="{{i}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactivo</span></a>
-                                    {{/if}}
-
+                                <td> {{u.persona.nombres}} {{u.persona.apellidos}} </td>
+                                <td> {{u.persona.cedula}} </td>
+                                <td> {{u.persona.fechaNacimiento}} </td> 
+                                <td> {{u.persona.edad}} </td> 
+                                <td><a id="a{{forloop.counter}}"  class="btn btn-success col-md-12 " href="#"  style="margin-left: 5%;background: #2eca6a" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">{{u.persona.rol.nombre}}</span></a>
+                                <td> {{u.persona.telefono}} </td> 
+                                <td> {{u.correo}} </td> 
+                                <td> {{u.persona.direccion}} </td> 
+                                {% if u.estado %}
+                                <td><a id="{{forloop.counter}}"  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Activo</span></a>
+                                {% else %}     
+                                <td><a id="{{forloop.counter}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactivo</span></a>
+                                {% endif %}     
                             </tr>
                         <script>
 
-                            $("#{{i}}").click(function () {
-                                $("#usuario").val("{{cuenta.persona.nombres}} {{cuenta.persona.apellidos}}");
-                                $("#estado").val("{{cuenta.estado}}");
-                                $("#externalC").val("{{cuenta.external_id}}");
+                            $("#{{forloop.counter}}").click(function () {
+                                $("#usuario").val("{{u.persona.nombres}} {{u.persona.apellidos}}");
+                                $("#estado").val("{{u.estado}}");
+                                $("#externalC").val("{{u.external_id}}");
                             });
-                            $("#a{{i}}").click(function () {
-                                $("#usuarioR").val("{{cuenta.persona.nombres}} {{cuenta.persona.apellidos}}");
-                                $("#rol").val("{{cuenta.persona.id_rol}}")
-                                $("#externalR").val("{{cuenta.persona.external_id}}");
+                            $("#a{{forloop.counter}}").click(function () {
+                                $("#usuarioR").val("{{u.persona.nombres}} {{u.persona.apellidos}}");
+                                $("#id_rol").val("{{u.persona.rol_id}}")
+                                $("#externalR").val("{{u.persona.external_id}}");
 
                             });
 
                         </script>
-
-                        {{/each}}
-
+                        {% endfor %}
                         </tbody>
 
                     </table>
@@ -126,20 +115,17 @@
                 </div>
             </center>
             <div class="modal-body">
-                <form action="/rol/cuenta" id="roles" method="POST">
+                <form action="# " id="roles" method="POST">
 
                     <input type="hidden"  id="externalR" name="externalR"/>
                     <div class="form-group">
                         <label for="usuario">Usuario:</label>
                         <input type="text" class="form-control" id="usuarioR"  readonly="">
+
                     </div>
                     <div class="form-group">
                         <label for="rol">Rol:</label>
-                        <select type="text" class="form-control" id="rol"  name="rol">
-                            {{#each this.listaR  as |rol|}}
-                            <option value="{{rol.id}}">{{rol.nombre}}</option>
-                            {{/each}}
-                        </select>
+                        {{formulario.rol}}
                     </div>
 
                     <div class="modal-footer col-md-12"> 
@@ -171,7 +157,7 @@
                     <input type="hidden"  id="externalC" name="externalC"/>
                     <div class="form-group">
                         <label for="usuario">Usuario:</label>
-                        <input type="text" class="form-control" id="usuario"  readonly="">
+                        <input type="text" class="form-control" id="usuario"  readonly="readonly">
                     </div>
                     <div class="form-group">
                         <label for="estado">Estado:</label>
@@ -192,4 +178,5 @@
 
     </div>
 </div>
+
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
-import json
+import json, crypt, os
 from .forms import FormularioPersona, FormularioCuenta
 from apps.modelo.models import Persona,Cuenta
 from django.contrib import messages
@@ -33,6 +33,9 @@ def registro(request):
 			datosC = formularioC.cleaned_data
 			cuenta = Cuenta()
 			cuenta.correo = datosC.get('correo')
+			#clave = datosC.get('clave')
+			#salt = os.environ.get('SALT')
+			#cuenta.clave = crypt.crypt(clave,salt)
 			cuenta.clave = datosC.get('clave')
 			cuenta.persona = persona
 			cuenta.save();

@@ -44,19 +44,16 @@
                 <div class="table-responsive" style="margin-top: 10%;background: #e5e5e5">               
 
                     <center>
-                        {{#if msg}}
-                        {{#if  msg.error}}
+                        
                         <center>
-                            <label style="background: #FE2E2E">{{ msg.error}}</label>
+                            <label style="background: #FE2E2E"> </label>
                         </center>
-                        {{/if}}
-                        {{#if msg.info}}
+                        
                         <center>
-                            <label style="background: #04B431">{{ msg.info}}</label>
+                            <label style="background: #04B431"> </label>
                         </center>
-                        {{/if}}
-                        {{/if}}
-                        <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Asiganacion d<span class="color-b">e Docentes</span></a>
+                       
+                       <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Asiganacion d<span class="color-b">e Docentes</span></a>
 
 
                     </center>
@@ -76,27 +73,27 @@
 
                         <tbody style="text-align: center">
 
-                            {{#each this.Asignacion  as |Asignacion i|}}
+                            
                             <tr>
-                                <td>{{i}}</td>
+                                <td> </td>
                                 <td>  
 
                                     <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{Asignacion.foto}}" width = "40" /> </a>
 
                                 </td>
-                                <td>{{Asignacion.solicitante}}</td> 
-                                <td>{{Asignacion.cedula}}</td> 
-                                <td>{{Asignacion.registro}}</td>
-                                <td>{{Asignacion.tipo}}</td>
+                                <td> </td> 
+                                <td> </td> 
+                                <td> </td>
+                                <td> /td>
 
-                                <td>{{Asignacion.carrera}}</td> 
+                                <td> </td> 
                                 <td> <a   href="/upload/archivos/{{Asignacion.archivo}}"> <img class = "rounded" src = "/images/icons/archivo.png" width = "40" /> </a></td>
-                                {{#if  Asignacion.estado}}
+                                 
                                 <td><a  id="{{i}}"  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">{{Asignacion.docente}}</span></a>
 
-                                    {{else}}
+                                 
                                 <td><a  id="{{i}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">En espera</span></a>
-                                    {{/if}}
+                                     
                             </tr>
 
                         <script>
@@ -114,11 +111,7 @@
 
                         </script>
 
-
-                        {{/each}}
-
-
-
+ 
 
                         </tbody>
 

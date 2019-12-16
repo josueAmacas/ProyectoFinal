@@ -1,3 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from apps.modelo.models import Persona, Rol, Cuenta, Tramite, Carrera
 
-# Create your views here.
+def periodoAcademico(request):
+	return render (request, 'decano/frm_periodo.html')

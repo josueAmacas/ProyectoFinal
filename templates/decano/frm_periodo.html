@@ -70,18 +70,15 @@
                     <!-- Trigger the modal with a button -->
                     <div class="table-responsive" style="background: #e5e5e5">                 
                         <center>
-                            {{#if msg}}
-                            {{#if  msg.error}}
+                            
                             <center>
-                                <label style="background: #FE2E2E">{{ msg.error}}</label>
+                                <label style="background: #FE2E2E"> </label>
                             </center>
-                            {{/if}}
-                            {{#if msg.info}}
-                            <center>
-                                <label style="background: #04B431">{{ msg.info}}</label>
+                            
+                                <center>
+                                <label style="background: #04B431"> </label>
                             </center>
-                            {{/if}}
-                            {{/if}}
+                           
 
                             <a class="navbar-brand text-brand" href="#" style="font-size: 200%">Lista de Per<span class="color-b">iodos Academicos</span></a>
                             <br>
@@ -100,21 +97,21 @@
                             </thead>
 
                             <tbody style="text-align: center;width: 100%">
-                                {{#each Periodo  as |periodo i|}}
+                               
                                 <tr>
-                                    <td>N°-{{i}}</td>
+                                    <td>N°- </td>
 
-                                    <td> {{periodo.fechaInicio}} </td>
-                                    <td> {{periodo.fechaFin}}</td>
-                                    <td> {{periodo.anio}}</td>
+                                    <td>   </td>
+                                    <td>  </td>
+                                    <td>  </td>
                                     <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#pdf"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
 
-                                    {{#if  periodo.estado}}
+                                    
                                     <td><a id="a{{i}}"  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Activo</span></a>
 
-                                        {{else}}
+                                       
                                     <td><a id="a{{i}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactivo</span></a>
-                                        {{/if}}
+                                        
                                     <td><a id="{{i}}" class="btn btn-success  "  href="#"  style="background: #FFC312;width: 100%" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Editar</span></a></td>
                                 </tr>
                             <script>
@@ -135,8 +132,7 @@
 
                             </script>
 
-                            {{/each}}
-
+                            
                             </tbody>
 
                         </table>

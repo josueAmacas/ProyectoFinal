@@ -22,7 +22,7 @@
         html += '        <br>';
         html += '        <a class="navbar-brand text-brand" href="#" style="font-size: 90%">Malla <span class="color-b"> Curricular ' + anio + '</span></a>';
         html += '        <br>';
-        if (estado === "true") {
+        if (estado === "True") {
             html += '        <td><a  class="btn btn-success "  href="#"  style="background: #26a356;width: 100%"><span class="glyphicon glyphicon-pencil">Activa</span></a>';
 
         } else {
@@ -30,7 +30,7 @@
         }
         html += '    </center>';
         html += '    <div class="embed-responsive" style="padding-bottom:70%">';
-        html += '        <object data="/upload/mallas/' + txt + '" type="application/pdf" width="100%" height="100%"></object>';
+        html += '        <object data="{% static "upload/mallas/" %}' + txt + '" type="application/pdf" width="100%" height="100%"></object>';
         html += '</div>';
         $("#pdf").html(html);
     }
@@ -48,18 +48,14 @@
                 <!-- Trigger the modal with a button -->
                 <div class="table-responsive" style="margin-top: 10%;background: #e5e5e5">           
                     <center>
-                        {{#if msg}}
-                        {{#if  msg.error}}
+                       
                         <center>
-                            <label style="background: #FE2E2E">{{ msg.error}}</label>
+                            <label style="background: #FE2E2E"> </label>
                         </center>
-                        {{/if}}
-                        {{#if msg.info}}
+                       
                         <center>
-                            <label style="background: #04B431">{{ msg.info}}</label>
+                            <label style="background: #04B431"> </label>
                         </center>
-                        {{/if}}
-                        {{/if}}
                         <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Lista d<span class="color-b">e Mallas</span></a>
                         <br>                           
                     </center>
@@ -74,36 +70,35 @@
                         <th>Carrera</th>
                         <th>Archivo</th>
                         <th>Estado</th>
-                        </thead>
+                        </thead>    
 
                         <tbody style="text-align: center">
-                            {{#each this.Malla  as |Malla i|}}
+                            {% for m in lista %}
                             <tr>
-                                <td>{{i}}</td>
+                                <td>{{m.mallaCurricular_id}}</td>
 
-                                <td>{{Malla.anio}}</td> 
-                                <td>{{Malla.carrera.area}}</td>
-                                <td>{{Malla.carrera.nombre}}</td> 
+                                <td>{{m.anio}}</td> 
+                                <td>{{m.carrera.area}}</td>
+                                <td>{{m.carrera.nombre}}</td> 
 
-                                <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>    
-                                {{#if  Malla.estado}}
+                                <td>  <a  id="b{{m.mallaCurricular_id}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "{% static 'images/icons/pdf.jpg' %}" width = "40" /> </a></td>    
+                                {% if  m.estado %}
 
-                                <td><a id="{{i}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Activa</span></a>
-
-                                    {{else}}
-                                <td><a id="{{i}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactiva</span></a>
-                                    {{/if}}
+                                <td><a id="{{m.mallaCurricular_id}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Activa</span></a>
+                                    {% else %}
+                                <td><a id="{{m.mallaCurricular_id}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactiva</span></a>
+                                    {% endif%}
                             </tr>
 
                         <script>
 
-                            $("#b{{i}}").click(function () {
-                                PDF("{{Malla.archivo}}", "{{Malla.carrera.area}}", "{{Malla.carrera.nombre}}", "{{Malla.anio}}", "{{Malla.estado}}");
+                            $("#b{{m.mallaCurricular_id}}").click(function () {
+                                PDF("{{m.archivo}}", "{{m.carrera.area}}", "{{m.carrera.nombre}}", "{{m.anio}}", "{{m.estado}}");
                             });
 
                         </script>
 
-                        {{/each}}
+                        {% endfor %}
 
                         </tbody>
 
@@ -126,7 +121,7 @@
 
             <div class="card" >
                 <div class="card-header " style="background: #bbb">
-                    <a type="button" class="btn btn-danger col-md-12" href="/menu/malla">Cerrar</a>
+                    <a type="button" class="btn btn-danger col-md-12" href="/mallaCurricular/mallaDecano">Cerrar</a>
 
                     <div class="" style="background: #e5e5e5" id="pdf">           
 
