@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from apps.modelo.models import Persona, Rol, Cuenta, Tramite, Carrera, Docente, MallaCurricular,Materia, Ciclo
+from apps.modelo.models import Persona, Rol, Tramite, Carrera, Docente, MallaCurricular,Materia, Ciclo
 from .forms import FormularioModificarRol
 
 #Vista perfiles

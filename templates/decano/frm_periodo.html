@@ -4,7 +4,6 @@
 {% block content %}
 <script>
     $(function () {
-
         $("#estado").validate({
             rules: {
                 malla: {
@@ -16,8 +15,6 @@
                 fecha_fin: {
                     required: true
                 }
-
-
             }
         });
     });
@@ -46,6 +43,7 @@
         $("#malla").val("");
         $("#external").val("0");
     }
+
     function PDF(txt) {
         var html = '<div class="container "  >';
         html += '<div class="embed-responsive  embed-responsive-4by3">';
@@ -57,7 +55,6 @@
 
     $(document).ready(function () {
         cargarMalla();
-
     });
 
 </script>
@@ -97,42 +94,38 @@
                             </thead>
 
                             <tbody style="text-align: center;width: 100%">
-                               
+                               {% for p in periodo %}
                                 <tr>
-                                    <td>N°- </td>
-
-                                    <td>   </td>
-                                    <td>  </td>
-                                    <td>  </td>
-                                    <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#pdf"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
-
-                                    
-                                    <td><a id="a{{i}}"  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Activo</span></a>
-
-                                       
-                                    <td><a id="a{{i}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactivo</span></a>
-                                        
-                                    <td><a id="{{i}}" class="btn btn-success  "  href="#"  style="background: #FFC312;width: 100%" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Editar</span></a></td>
+                                    <td>N°- {{forloop.counter}} </td>
+                                    <td> {{p.fechaInicio}} </td>
+                                    <td> {{p.fechaFin}} </td>
+                                    <td> {{malla.anio}} </td>
+                                    <td> <a  id="b{{forloop.counter}}" data-toggle="modal" data-target="#pdf"><img class = "rounded" src = "{% static 'images/icons/pdf.jpg' %}" width = "40" /></a></td>
+                                    {% if p.estado %}
+                                    <td><a id="a{{forloop.counter}}"  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Activo</span></a>
+                                    {% else %}       
+                                    <td><a id="a{{forloop.counter}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactivo</span></a>
+                                    {% endif %}    
+                                    <td><a id="{{forloop.counter}}" class="btn btn-success  "  href="#"  style="background: #FFC312;width: 100%" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Editar</span></a></td>
                                 </tr>
                             <script>
 
-                                $("#{{i}}").click(function () {
-                                    $("#fecha_inicio").val("{{periodo.fechaInicio}}");
-                                    $("#fecha_fin").val("{{periodo.fechaFin}}");
-                                    $("#malla").val("{{periodo.external_malla}}");
-                                    $("#external").val("{{periodo.external_id}}");
+                                $("#{{forloop.counter}}").click(function () {
+                                    $("#fecha_inicio").val("{{p.fechaInicio}}");
+                                    $("#fecha_fin").val("{{p.fechaFin}}");
+                                    $("#malla").val("{{p.external_malla}}");
+                                    $("#external").val("{{p.external_id}}");
                                 });
-                                $("#a{{i}}").click(function () {
-                                    $("#externalE").val("{{periodo.external_id}}");
-                                    $("#estado").val("{{periodo.estado}}");
+                                $("#a{{forloop.counter}}").click(function () {
+                                    $("#externalE").val("{{p.external_id}}");
+                                    $("#estado").val("{{p.estado}}");
                                 });
-                                $("#b{{i}}").click(function () {
-                                    PDF("{{periodo.archivo}}");
+                                $("#b{{forloop.counter}}").click(function () {
+                                    PDF("{{p.archivo}}");
                                 });
 
                             </script>
-
-                            
+                            {% endfor %}
                             </tbody>
 
                         </table>

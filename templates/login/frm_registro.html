@@ -50,11 +50,11 @@
                     minlength: 10,
                     maxlength: 10
                 },
-                apellidos: {
+                last_name: {
                     required: true,
                     soloLetras: true
                 },
-                nombres: {
+                first_name: {
                     soloLetras: true,
                     required: true
                 },
@@ -71,7 +71,7 @@
                     required: true,
                     maxlength: 255
                 },
-                correo: {
+                email: {
                     required: true
                 },
                 clave: {
@@ -148,13 +148,13 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
-                        {{fPersona.apellidos}}
+                        {{fPersona.last_name}}
                     </div>
                     <div class="input-group form-group col-sm-6">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
-                        {{fPersona.nombres}}
+                        {{fPersona.first_name}}
                     </div>
                 </div>
                 <div class="form-group row"> 
@@ -190,19 +190,26 @@
                     <label style="background: #FE2E2E">Datos de Cuenta</label>
                 </center>
                 <br>
+                Usuario
+                <div class="input-group form-group">                                
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    </div>
+                    {{fPersona.username}}
+                </div>
                 Correo Electronico
                 <div class="input-group form-group">                                
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                     </div>
-                    {{fCuenta.correo}}
+                    {{fPersona.email}}
                 </div>
                 Clave
                 <div class="input-group form-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-key"></i></span>
                     </div>
-                    {{fCuenta.clave}}
+                    {{fPersona.password}}
                 </div>                            
                 <div class="form-group">
                     <button type="submit"  class="btn float-right login_btn">Registrarse</button>

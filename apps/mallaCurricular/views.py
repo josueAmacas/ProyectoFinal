@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from apps.modelo.models import Persona, Rol, Cuenta, Tramite, MallaCurricular, Carrera
+from apps.modelo.models import Persona, Rol, Tramite, MallaCurricular, Carrera
 
 def mallaSolicitante(request): 
 	malla = MallaCurricular.objects.get(mallaCurricular_id = 1)

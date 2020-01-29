@@ -1,11 +1,10 @@
-import uuid
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 class Carrera(models.Model):
 	carrera_id = models.AutoField(primary_key = True)
 	area = models.CharField(max_length=200, null=False)
 	nombre = models.CharField(max_length=200, null=False)
-	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
 
 	def __str__(self):
 		return '{}'.format(self.nombre)
@@ -15,7 +14,6 @@ class MallaCurricular(models.Model):
 	archivo = models.CharField(max_length=200, null= False)
 	anio =  models.CharField(max_length = 5, null = False)
 	estado = models.BooleanField(default =True)
-	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
 	carrera = models.ForeignKey(
 		'Carrera', 
 		on_delete = models.CASCADE,
@@ -37,7 +35,6 @@ class Materia(models.Model):
 	codigo = models.CharField(max_length=50, null=False)
 	duracion = models.CharField(max_length=10, null=False)
 	obligatoria = models.BooleanField(default =True)
-	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
 	ciclo = models.ForeignKey(
 		'Ciclo', 
 		on_delete = models.CASCADE,
@@ -48,7 +45,6 @@ class PeriodoAcademico(models.Model):
 	fechaInicio = models.DateField(auto_now = False, auto_now_add = False, null = False)
 	fechaFin = models.DateField(auto_now = False, auto_now_add = False, null = False)
 	estado = models.BooleanField(default =True)
-	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
 
 class Rol(models.Model):
 	listaRol =(
@@ -63,39 +59,30 @@ class Rol(models.Model):
 	def __str__(self):
 		return '{}'.format(self.nombre)
 
-
-class Persona(models.Model):
+class Persona(AbstractUser):
 	persona_id = models.AutoField(primary_key = True)
 	cedula = models.CharField(max_length=10, unique = True, null=False)
-	apellidos = models.CharField(max_length=200, null=False)
-	nombres = models.CharField(max_length=200, null=False)
 	edad = models.CharField(max_length=3, null=False)
-	fechaNacimiento =  models.DateField(auto_now = False, auto_now_add = False, null = False)
+	fechaNacimiento =  models.DateField(auto_now = False, auto_now_add = False, null = True)
 	direccion = models.TextField(max_length=200, default= 'sin direccion')
 	telefono = models.CharField(max_length=13)
 	foto = models.CharField(max_length=200)
-	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
+	isDecano = models.BooleanField(default = False)
+	isDocente = models.BooleanField(default = False)
+	isEstudiante = models.BooleanField(default = True)
+	isAbogado = models.BooleanField(default = False)
 	rol = models.ForeignKey(
 		'Rol', 
 		on_delete = models.CASCADE,
 	)
+	
+	def __str__(self):
+		return '{}{}'.format(self.nombres, self.apellidos)
 
 class Docente(models.Model):
 	docente_id = models.AutoField(primary_key = True)
 	titulo = models.CharField(max_length=200, null=False)
 	carrera = models.CharField(max_length=200, null=False)
-	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
-	persona = models.ForeignKey(
-		'Persona', 
-		on_delete = models.CASCADE,
-	)
-	
-class Cuenta(models.Model):
-	cuenta_id = models.AutoField(primary_key = True)
-	correo = models.EmailField(max_length = 50, null = False)
-	clave = models.CharField(max_length = 50, null = False)
-	estado = models.BooleanField(default =True)	
-	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
 	persona = models.ForeignKey(
 		'Persona', 
 		on_delete = models.CASCADE,
@@ -105,7 +92,6 @@ class Silabo(models.Model):
 	Silabo_id = models.AutoField(primary_key = True)
 	estado = models.BooleanField(default =True)
 	archivo = models.CharField(max_length = 200, null = False)
-	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
 	docente = models.ForeignKey(
 		'Docente', 
 		on_delete = models.CASCADE,
@@ -123,7 +109,8 @@ class Archivo(models.Model):
 	archivo_id = models.AutoField(primary_key = True)
 	archivo = models.CharField(max_length = 200, null = False)
 	informePeticionario = models.CharField(max_length = 200, null = False)
-	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
+	def __str__(self):
+		return '{}'.format(self.informePeticionario)
 
 class Tramite(models.Model):
 	tramite_id = models.AutoField(primary_key = True)
@@ -132,7 +119,14 @@ class Tramite(models.Model):
 	external_docente = models.CharField(max_length = 200, null = False)
 	external_carrera = models.CharField(max_length = 200, null = False)
 	tipo = models.CharField(max_length = 200, null = False)
-	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
+	carrera = models.ForeignKey(
+		'Carrera',
+		on_delete = models.CASCADE,
+	)
+	docente = models.ForeignKey(
+		'Docente',
+		on_delete = models.CASCADE,
+	)
 	archivo = models.ForeignKey(
 		'Archivo', 
 		on_delete = models.CASCADE,
@@ -148,7 +142,6 @@ class Seguimiento(models.Model):
 	revSellos = models.BooleanField(default =False)
 	asigDocente = models.BooleanField(default =False)
 	revDocumentacion = models.BooleanField(default =False)
-	external_id = models.UUIDField(default= uuid.uuid4, editable= False)
 	tramite =  models.ForeignKey(
 		'Tramite', 
 		on_delete = models.CASCADE,

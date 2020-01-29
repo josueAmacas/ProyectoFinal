@@ -1,5 +1,11 @@
 from django.shortcuts import render, redirect
-from apps.modelo.models import Persona, Rol, Cuenta, Tramite, Carrera
+from apps.modelo.models import PeriodoAcademico, MallaCurricular
 
 def periodoAcademico(request):
-	return render (request, 'decano/frm_periodo.html')
+	periodo = PeriodoAcademico.objects.all()
+	malla = MallaCurricular.objects.get(mallaCurricular_id = 1)
+	context = {
+		'periodo': periodo,
+		'malla': malla,
+	}
+	return render (request, 'decano/frm_periodo.html', context)

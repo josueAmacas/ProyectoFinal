@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import render, redirect
-from apps.modelo.models import Persona, Rol, Cuenta, Tramite, Carrera
+from apps.modelo.models import Persona, Rol, Tramite, Carrera
 
 def tramiteSolicitante(request):
 	return render (request, 'solicitante/frm_tramite.html')

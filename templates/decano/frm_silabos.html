@@ -15,12 +15,10 @@
 
     <div class="card-header"  style="background: #bbb">
 
-
         <div class="row">
 
             <div class="container " style="margin-top: 3%"> 
                 <!-- Trigger the modal with a button -->
-
 
                 <div class=" table-responsive " style="margin-top: 10%;background: #e5e5e5">           
 
@@ -41,7 +39,7 @@
                     <table id="tabla" class="table table-hover table-responsive  ">
 
                         <thead class="color-b" style="font-size: 20px;text-align: center">                                         
-                        <th>#</th>
+                        <th>Nro</th>
                         <th>Imagen</th>
                         <th>Docente</th>
                         <th>Periodo Academico</th>
@@ -51,38 +49,33 @@
                         </thead>
 
                         <tbody style="text-align: center">
-
-                            
+                            {% for s in silabo %}
                             <tr>
-                                <td>   </td>
-                                <td>  
-
-                                    <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{silabo.docente.persona.foto}}" width = "40" /> </a>
+                                <td> {{forloop.counter}}  </td>
+                                <td> 
+                                    <a href="{% static 'images/gallery/sin_foto.jpg' %}" target="_blank"><img class = "rounded" src = "{% static 'images/gallery/' %}{{s.docente.persona.foto}}" width = "40" /></a>
                                 </td>
-                                <td> </td>
-                                <td> Desde:   Hasta:   </td>
-                                <td>  </td>
-                                <td>  <a  id="b{{i}}" data-toggle="modal" data-target="#PDF"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
-
-                                 
-                                <td><a  id="{{i}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Activo</span></a>
-
-                                     
-                                <td><a id="{{i}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactivo</span></a>
-                                     
+                                <td> {{s.docente.persona.nombres}} {{s.docente.persona.apellidos}} </td>
+                                <td> Desde: {{s.periodoAcademico.fechaInicio}}  Hasta: {{s.periodoAcademico.fechaFin}}  </td>
+                                <td> {{s.materia.nombre}} </td>
+                                <td><a id="b{{forloop.counter}}" data-toggle="modal" data-target="#PDF"><img class = "rounded" src = "{% static 'images/icons/pdf.jpg' %}" width = "40" /> </a></td>
+                                {% if s.estado %}     
+                                <td><a  id="{{forloop.counter}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Activo</span></a>
+                                {% else %}         
+                                <td><a id="{{forloop.counter}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactivo</span></a>
+                                {% endif %}                                     
                             </tr>
                         <script>
-                            $("#{{i}}").click(function () {
-                                $("#external").val("{{silabo.external_id}}");
-                                $("#estado").val("{{silabo.estado}}");
-                                $("#usuario").val("{{silabo.docente.persona.nombres}} {{silabo.docente.persona.apellidos}}");
+                            $("#{{forloop.counter}}").click(function () {
+                                $("#external").val("{{s.external_id}}");
+                                $("#estado").val("{{s.estado}}");
+                                $("#usuario").val("{{s.docente.persona.nombres}} {{s.docente.persona.apellidos}}");
                             });
-                            $("#b{{i}}").click(function () {
-                                PDF("{{silabo.external_id}}");
+                            $("#b{{forloop.counter}}").click(function () {
+                                PDF("{{s.external_id}}");
                             });
                         </script>
-                         
-
+                         {% endfor %}
                         </tbody>
 
                     </table>

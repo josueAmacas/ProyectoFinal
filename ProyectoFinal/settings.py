@@ -66,6 +66,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ProyectoFinal.urls'
 
+AUTH_USER_MODEL = 'modelo.Persona'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
