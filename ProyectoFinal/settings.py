@@ -120,7 +120,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#LOGIN_URL = reverse_lazy('autenticar') #autenticar es el nombre de una url
+
+LOGIN_URL = reverse_lazy('autenticar') #autenticar es el nombre de una url
 
 
 # Internationalization

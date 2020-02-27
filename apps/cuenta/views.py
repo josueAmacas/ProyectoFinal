@@ -1,12 +1,36 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse, JsonResponse
+from django.urls import reverse
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 import json, crypt, os
-from .forms import FormularioPersona
+from .forms import FormularioPersona, FormularioLogin
 from apps.modelo.models import Persona
 from django.contrib import messages
 
 def ingresar(request):
-	return render (request, 'login/frm_login.html')
+	if request.method == 'POST':
+		formulario = FormularioLogin(request.POST)
+		if formulario.is_valid():
+			email = request.POST.get('email')
+			print(email)
+			clave = request.POST.get('clave')
+			print(clave)
+			user = authenticate(user = email, password = clave)
+			print(user)
+			if user is not None:
+				if user.is_active & user.isEstudiante:
+					login(request, user)
+					return HttpResponseRedirect(reverse('solicitante'))
+				else:
+					print('usuario desactivado')
+			else:
+				print('usuario y/o contrasena incorrecto')
+	else:
+		formulario = FormularioLogin()
+	context = {
+		'formulario': formulario
+	}
+	return render (request, 'login/frm_login.html',context)
 
 def registro(request):
 	formularioP = FormularioPersona(request.POST)
@@ -14,8 +38,9 @@ def registro(request):
 		if formularioP.is_valid():
 			datosP = formularioP.cleaned_data
 			persona = Persona()
-			persona.password = datosP.get('password')
+			persona.set_password(datosP.get("password"))
 			persona.is_superuser = True
+			persona.is_staff = True
 			persona.username = datosP.get("username")
 			persona.first_name = datosP.get('first_name')
 			persona.last_name = datosP.get('last_name')

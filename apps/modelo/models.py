@@ -61,8 +61,8 @@ class Rol(models.Model):
 
 class Persona(AbstractUser):
 	persona_id = models.AutoField(primary_key = True)
-	cedula = models.CharField(max_length=10, unique = True, null=False)
-	edad = models.CharField(max_length=3, null=False)
+	cedula = models.CharField(max_length=10, unique = True, null=True)
+	edad = models.CharField(max_length=3, null=True)
 	fechaNacimiento =  models.DateField(auto_now = False, auto_now_add = False, null = True)
 	direccion = models.TextField(max_length=200, default= 'sin direccion')
 	telefono = models.CharField(max_length=13)
@@ -77,7 +77,7 @@ class Persona(AbstractUser):
 	)
 	
 	def __str__(self):
-		return '{}{}'.format(self.nombres, self.apellidos)
+		return '{}{}'.format(self.first_name, self.last_name)
 
 class Docente(models.Model):
 	docente_id = models.AutoField(primary_key = True)
