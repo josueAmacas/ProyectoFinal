@@ -35,10 +35,10 @@
                 edad: {
                     required: true
                 },
-                telefono: {
+                telefono1: {
                     required: true
                 },
-                direccion: {
+                direccion1: {
                     required: true,
                     maxlength: 255
                 }
@@ -49,26 +49,28 @@
     });
 
     $(document).ready(function () {
-        $("#cedula").val("{{usuario.persona.cedula}}");
-        $("#apellidos").val("{{usuario.persona.apellidos}}");
-        $("#nombres").val("{{usuario.persona.nombres}}");
-        $("#fecha_nacimiento").val("{{usuario.persona.fecha_nacimiento}}");
-        $("#edad").val("{{usuario.persona.edad}}");
-        $("#telefono").val("{{usuario.persona.telefono}}");
-        $("#direccion").val("{{usuario.persona.direccion}}");
+        $("#id_fechaNacimiento").change(function () {
+            var edad = calcularEdad($("#id_fechaNacimiento").val());
+            $("#id_edad").val(edad);
+        });
+        $("#cedula").val("{{persona.cedula}}");
+        $("#id_last_name").val("{{persona.last_name}}");
+        $("#id_first_name").val("{{persona.first_name}}");
+        $("#id_fechaNacimiento").val("{{persona.fechaNacimiento}}");
+        $("#id_edad").val("{{persona.edad}}");
+        $("#id_telefono").val("{{persona.telefono}}");
+        $("#id_direccion").val("{{persona.direccion}}");
     });
 </script>
 <!------ Include the above in your HEAD tag ---------->
-<link href="../stylesheets/perfil.css" rel="stylesheet" type="text/css"/>
-<div class="container emp-profile">
+<link href="{% static '/css/perfil.css' %}" rel="stylesheet" type="text/css"/>
+<div class="container emp-profile" >
     
     <form method="post">
         <div class="row">
             <div class="col-md-4" >
                 <div class="profile-img">
-                    <img style="width: 50%;height: 20%" src="/images/gallery/{{usuario.persona.foto}}" class="user-image blog_post_img" alt="User Image">
-
-
+                    <img style="width: 50%;height: 20%" src="{{persona.foto.url}}" class="user-image blog_post_img" alt="User Image">
                     <a style="width: 50%" class="file btn btn-lg btn-primary" href="#" data-toggle="modal" data-target="#exampleModal_foto" data-whatever="@mdo"> <i class = " fa fa-user "> </i> Foto </a>
 
                 </div>
@@ -78,11 +80,11 @@
 
                     <h5>
 
-                        <label>{{usuario.persona.nombres}}  {{usuario.persona.apellidos}} </label>
+                        <label>{{persona.first_name}}  {{persona.last_name}} </label>
 
                     </h5>
                     <h6>
-                        <label>{{usuario.persona.rol.nombre}} </label>
+                        <label>{{persona.rol.nombre}} </label>
                     </h6>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
@@ -146,7 +148,7 @@
                                 <label>Cedula</label>
                             </div>
                             <div class="col-md-6">
-                                <p><label>{{usuario.persona.cedula}}</label></p>
+                                <p><label>{{persona.cedula}}</label></p>
                             </div>
                         </div>
                         <div class="row">
@@ -154,7 +156,7 @@
                                 <label>Fecha de Nacimiento</label>
                             </div>
                             <div class="col-md-6">
-                                <p><label>{{usuario.persona.fecha_nacimiento}}</label></p>
+                                <p><label>{{persona.fechaNacimiento}}</label></p>
                             </div>
                         </div>
                         <div class="row">
@@ -162,7 +164,7 @@
                                 <label>Edad</label>
                             </div>
                             <div class="col-md-6">
-                                <p><label>{{usuario.persona.edad}}</label></p>
+                                <p><label>{{persona.edad}}</label></p>
                             </div>
                         </div>
                         <div class="row">
@@ -170,7 +172,7 @@
                                 <label>Correo</label>
                             </div>
                             <div class="col-md-6">
-                                <p><label>{{usuario.correo}}</label></p>
+                                <p><label>{{persona.email}}</label></p>
                             </div>
                         </div>
                         <div class="row">
@@ -178,7 +180,7 @@
                                 <label>Telefono</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{usuario.persona.telefono}}</p>
+                                <p>{{persona.telefono}}</p>
                             </div>
                         </div>
                         <div class="row">
@@ -186,7 +188,7 @@
                                 <label>Direccion</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{usuario.persona.direccion}}</p>
+                                <p>{{persona.direccion}}</p>
                             </div>
                         </div>
                     </div>
@@ -202,18 +204,17 @@
                             </thead>
 
                             <tbody style="text-align: center">
-                                
+                                {% for t in tramite %}
                                 <tr>
-                                    <td>{{Tramite.registro}}</td> 
-                                    <td>{{Tramite.tipo}}</td> 
-                                    
-                                    <td><a  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Enviado</span></a>
-
-                                        
-                                    <td><a  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Rechazado</span></a>
-                                        
+                                    <td>{{t.registro}}</td> 
+                                    <td>{{t.tipo}}</td> 
+                                    {% if t.estado %}
+                                    <td><a  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Enviado" ><span class="glyphicon glyphicon-pencil">Enviado</span></a>
+                                    {% else %}
+                                    <td><a  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Rechazado" ><span class="glyphicon glyphicon-pencil">Rechazado</span></a>
+                                    {% endif %}
                                 </tr>
-
+                                {% endfor %}
                             </tbody>
 
                         </table>
@@ -237,13 +238,13 @@
             </div>
             <div class = "modal-header"></div>
             <div class = "modal-body">
-                <form id = "formulario" method = "POST" enctype = "multipart/form-data" action = "/perfil/foto">
+                <form id = "formulario" method = "POST" enctype = "multipart/form-data"> {% csrf_token %}
 
                     <div class = " form-group row">
                         <div class = "  col-sm-10">
                             <center>
-                                <input type = "hidden" value = "{{usuario.persona.external_id}}" id = "external_foto" name = "external" />                      
-                                <input type = "file" class = "btn-lg btn-link " name = "archivo" id = "archivo">
+                                <input type = "hidden" value = "{{persona.persona_id}}" id = "external_foto" name = "external" />                      
+                                {{formF.foto}}
                             </center>
                         </div>
                     </div>
@@ -273,7 +274,7 @@
 
             <div class="modal-body">
 
-                <form id="form_registro" name="form_registro" method="POST" action="/perfil/editar" style="color: white">
+                <form id="form_registro" name="form_registro" method="POST" style="color: white">{% csrf_token %}
                     <center>
                         <label style="background: #FE2E2E">Datos Generales</label>
                         <br>
@@ -281,7 +282,7 @@
                     </center>
                     <br>
                     <div class="form-group row">
-                        <input  value="{{usuario.persona.external_id}} " id="external" name="external" type="hidden">
+                        <input  value="{{persona.persona_id}} " id="external" name="external" type="hidden">
 
                         <div class="input-group form-group col-sm-12">
                             <label class="col-sm-12" style="color: #000">Cedula:</label>
@@ -297,7 +298,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            <input id="apellidos" name="apellidos" type="text" class="form-control" placeholder="Apellidos ">
+                            {{frm.last_name}}
 
                         </div>
                         <div class="input-group form-group col-sm-6">
@@ -305,8 +306,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            <input id="nombres" name="nombres" type="text" class="form-control" placeholder="Nombres ">
-
+                            {{frm.first_name}}                            
                         </div>
                     </div>
                     <div class="form-group row"> 
@@ -315,14 +315,14 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            <input  id="fecha_nacimiento" name="fecha_nacimiento" type="date" class="form-control" placeholder="Fecha de Nacimiento ">
+                            <{{frm.fechaNacimiento}}
                         </div>                  
                         <div class="input-group form-group col-sm-6">
                             <label class="col-sm-12" style="color: #000">Edad:</label>
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            <input  id="edad" name="edad" type="text" class="form-control" placeholder="Edad " readonly>
+                           {{frm.edad}}
                         </div>
                     </div>
                     <div class="form-group row"> 
@@ -331,16 +331,14 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            <input  id="telefono" name="telefono" type="text" class="form-control" placeholder="Telefono ">
-
+                            {{frm.telefono}}
                         </div>
                         <div class="input-group form-group col-sm-6">
                             <label class="col-sm-12" style="color: #000">Direccion:</label>
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            <input id="direccion" name="direccion" type="text" class="form-control" placeholder="Direccion">
-
+                            {{frm.direccion}}
                         </div>
                     </div>                         
                     <div class="form-group">

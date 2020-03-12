@@ -32,8 +32,7 @@
                             <th>Foto</th>
                             <th>Solicitante</th>
                             <th>Codigo</th>
-                            <th>Tipo</th>
-                            <th>Foto</th>
+                            <th>Tipo</th>                    
                             <th>Docente</th>
 
                             <th>Carpeta</th>
@@ -43,49 +42,42 @@
                             </thead>
 
                             <tbody style="text-align: center">
-                                
+                               {% for t in tramite %}
                                 <tr>
-                                    <td></td>
-                                    <td  class="navbar-brand " style="font-size: 100%"></td> 
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{t.carrera}}</td>
                                     <td>  
-
-                                        <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{Tramite.foto}}" width = "40" /> </a>
+                                        <a href="{{t.persona.foto.url}}" target="_blank"> <img class = "rounded" src = "{{t.persona.foto.url}}" width = "40" /> </a>
 
                                     </td>
-                                    <td></td> 
-                                    <td></td> 
-                                    <td></td>
-                                    <td>  
+                                    <td>{{t.persona.first_name}} {{t.persona.last_name}}</td> 
+                                    <td>{{t.registro}} </td> 
+                                    <td>{{t.tipo}} </td>
 
-                                        <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{Tramite.fotD}}" width = "40" /> </a>
+                                    <td>{{t.docente}} </td> 
+                                    <td>  <a href="{{t.archivo.archivo.url}}"> <img class = "rounded" src = "{% static 'images/icons/archivo.png'%}" width = "40" /> </a></td>
+                                    <td>  <a href="/upload/informesContenido/{{Tramite.informe}}"> <img class = "rounded" src = "{% static 'images/icons/pdf.jpg'%}" width = "40" /> </a></td>
 
-                                    </td>
-                                    <td></td> 
-
-                                    <td>  <a href="/upload/archivos/{{Tramite.archivo}}"> <img class = "rounded" src = "/images/icons/archivo.png" width = "40" /> </a></td>
-                                    <td>  <a href="/upload/informesContenido/{{Tramite.informe}}"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
-
-                                     
-                                    <td><a id="{{i}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Aceptado</span></a>
-
-                                       
-                                    <td><a id="{{i}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">En Espera</span></a>
-                                      
+                                    {% if t.estado %}
+                                    <td><a id="{{forloop.counter}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Aceptado</span></a>
+                                    {% else %}
+                                    <td><a id="{{forloop.counter}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">En Espera</span></a>
+                                    {% endif %}
                                 </tr>
-
                             <script>
 
-                                $("#{{i}}").click(function () {
-                                    $("#external").val("{{Tramite.external_id}}");
-                                    $("#registro").val("{{Tramite.registro}}");
-                                    $("#estado").val("{{Tramite.estado}}");
-
+                                $("#{{forloop.counter}}").click(function () {
+                                    $("#id_registro").val("{{t.registro}}");
+                                    var sel = '{{t.estado}}';
+                                    if( sel == 'True'){
+                                        $("#id_estado").prop('checked',true);
+                                    }else{
+                                        $("#id_estado").prop('checked',false);
+                                    }
                                 });
 
                             </script>
-
-                         
-
+                            {% endfor %}
                             </tbody>
 
                         </table>
@@ -111,22 +103,16 @@
                 </div>
             </center>
             <div class="modal-body">
-                <form action="/bloquear/tramite"  method="POST">
-                    <input type="hidden" class="form-control"  value="0" id="external" name="external"  readonly>
-
+                <form name="estadoT" id="estadoT" method="POST">
+                    {% csrf_token %}
                     <div class="form-group">
                         <label for="usuario">Tramite:</label>
-                        <input type="text" class="form-control"   id="registro"   readonly>
+                        {{frmET.registro}}
                     </div>
                     <div class="form-group">
                         <label for="estado">Estado:</label>
-                        <select class="form-control" id="estado" name="estado">
-                            <option value="true">Aceptado</option>
-                            <option value="false">En Espera</option>
-                        </select>
+                        {{frmET.estado}}
                     </div>
-
-
                     <div class="modal-footer col-md-12"> 
                         <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>
                         <button type="button" class="btn btn-danger col-md-6"  data-dismiss="modal">Cerrar</button>

@@ -6,7 +6,10 @@ urlpatterns = [
     path('decano', views.perfilDecano, name= 'decano'),
     path('docente', views.perfilDocente, name= 'docente'),
     path('solicitante', views.perfilSolicitante, name= 'solicitante'),
-    path('perfilUsuario', views.editarPerfil),
+    path('perfilSolicitante', views.editarPerfilSolicitante),
+    path('perfilDocente', views.editarPerfilDocente),
+    path('perfilAbogado', views.editarPerfilAbogado),
+    path('perfilDecano', views.editarPerfilDecano),
     path('requisitosDocente', views.requisitosDocente),
     path('requisitosSolicitante', views.requisitosSolicitante),
     path('requisitosDecano', views.requisitosDecano),
@@ -18,4 +21,6 @@ urlpatterns = [
     path('planDecano', views.planDecano),
     path('planAbogado', views.planAbogado),
     path('planDocente', views.planDocente),
+    path('cargarPersona', views.cargarPersona),
+    path('cargarDocente', views.cargarDocente),
 ]

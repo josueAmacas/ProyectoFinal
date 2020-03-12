@@ -39,43 +39,39 @@
                             <th>Estado</th>
                             </thead>
 
-                            <tbody style="text-align: center">
-
-                                 
+                            <tbody style="text-align: center">                                                  
+                                {% for s in seguimiento %}        
                                 <tr>
-                                    <th> </th> 
-
-                                    <th> </th>  
-                                     
+                                    <th>{{forloop.counter}}</th> 
+                                    <th>{{s.tramite.registro}}</th>  
+                                    {% if s.revSolicitud %}
                                     <th  style="background: #FFC312">Revisado</th>
-
-                                     
+                                    {% else %}
                                     <th  style="background: #FE2E2E">En Espera</th>                    
-                                    
+                                    {% endif %}
+                                    {% if s.revSellos %}
                                     <th  style="background: #FFC312">Revisado</th>
-
-                                    
+                                    {% else %}
                                     <th  style="background: #FE2E2E">En Espera</th>                    
-                                     
-                                    <th  style="background: #FFC312"> </th>
-
-                                     
+                                    {% endif %}
+                                    {% if  s.asigDocente %}
+                                    <th  style="background: #FFC312">{{s.tramite.docente}}</th>
+                                    {% else %}
                                     <th  style="background: #FE2E2E">No Asignado</th>                    
-                                 
+                                    {% endif %}
+                                    {% if  s.revDocumentacion %}
                                     <th  style="background: #FFC312">Revisado</th>
-
-                                   
+                                    {% else %}
                                     <th  style="background: #FE2E2E">En Espera</th>                    
-                                    
+                                    {% endif %}
+                                    {% if  s.tramite.estado %}
                                     <th  style="background: #FFC312">Aceptado</th>
-
-                                     
+                                    {% else %}
                                     <th  style="background: #FE2E2E">No Admitido</th>                    
-                                    
+                                    {% endif %}
 
-                                </tr>
-                                                  
-
+                                </tr>                       
+                            {% endfor %}
                             </tbody>
 
                         </table>
@@ -88,43 +84,4 @@
 
     </div>  
 </div> 
-
-<div id="Form2" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <center>
-                <div class="modal-header" >
-
-                    <h2 class="modal-title" style="margin-left: 15%">Estado de Solicitud</h2> 
-                </div>
-            </center>
-            <div class="modal-body">
-                <form action="/editar/consultas/" id="consultas" method="POST">
-
-                    <input type="hidden"  id="external" name="external"/>
-                    <div class="form-group">
-                        <label for="usuario">Usuario:</label>
-                        <input type="text" class="form-control" id="usuario"  readonly="">
-                    </div>
-                    <div class="form-group">
-                        <label for="estado">Estado:</label>
-                        <select class="form-control" id="estado"  name="estado">
-                            <option>Aceptada</option> 
-                            <option>Denegada</option>
-                        </select>
-                    </div>
-
-                    <div class="modal-footer col-md-12"> 
-                        <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>
-                        <button type="button" class="btn btn-danger col-md-6"  data-dismiss="modal">Cerrar</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-
-    </div>
-</div>
 {% endblock %}

@@ -91,24 +91,25 @@
                                 </ul>
                             </div>
                         </li>
+                        
                         <li class="nav-item" >
                             <div class="panel-body" style="width: 30%;height: 20%">
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown">nombre</a>
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown">{{persona.first_name}}  {{persona.last_name}}</a>
                                 <ul class="dropdown-menu" role="menu" style="background: #d8d8d8">
-                                    <li><center><a class="col-md-10">  rol   </a></center></li>
-                                    <li><center><a class="nav-item"><img style="width: 100%;height: 20%" src="{% static 'images/gallery/sin_foto.jpg' %}" class="user-image blog_post_img col-md-10" alt="User Image"></a></center></li>
+                                    <li><center><a class="col-md-10">  {{persona.rol.nombre}}   </a></center></li>
+                                    <li><center><a class="nav-item"><img style="width: 100%;height: 20%" src="{{persona.foto.url}}" class="user-image blog_post_img col-md-10" alt="User Image"></a></center></li>
                                     <br>
                                     <li class = "user-footer">
-                                    <center>
-                                        <a href="/personas/perfilUsuario" class="btn btn-success ">Perfil</a>
-                                        <a href="/cerrarSesion" class="btn btn-danger ">Salir</a> 
-                                    </center>
+                                        <center>
+                                            <a href="/personas/perfilSolicitante" class="btn btn-success ">Perfil</a>
+                                            <a href="{% url 'logout' %}" class="btn btn-danger ">Salir</a> 
+                                        </center>
                                     </li>
 
                                 </ul>
                             </div>
                         </li>
-
+                       
 
                     </ul>
 
@@ -158,7 +159,7 @@
                         <div class="copyright-footer">
                             <p class="copyright color-text-a">
                                 &copy; Copyright<br>
-                                <span class="color-a">Josue Andres. Macas</span> 
+                                <span class="color-a">Josue Andres Macas Caraguay</span> 
                             </p>
                         </div>
                         <div class="credits">

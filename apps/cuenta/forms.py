@@ -32,11 +32,11 @@ class FormularioPersona(forms.ModelForm):
 			'username':forms.TextInput(attrs={'class':'form-control','placeholder':'Nombre de Usuario'}),
 			'password':forms.PasswordInput(attrs={'class':'form-control','placeholder':'Contraseña'}),
 			'email':forms.EmailInput(attrs={'class':'form-control','placeholder':'Correo Electronico'}),
-			'rol': forms.Select(attrs={'class':'form-control'}),#,'style':'visibility:hidden'}),
+			'rol': forms.Select(attrs={'class':'form-control','style':'visibility:hidden'}),
 		}
 
 class FormularioLogin(forms.Form):
-	email = forms.CharField(widget = forms.TextInput(attrs={'class':'input-group form-control','placeholder':'Email'}),
+	email = forms.CharField(widget = forms.EmailInput(attrs={'class':'input-group form-control','placeholder':'Email'}),
 								label='Usuario')
-	clave = forms.CharField(widget = forms.PasswordInput(attrs={'class':'input-group form-control','placeholder':'Clave'}),
+	password = forms.CharField(widget = forms.PasswordInput(attrs={'class':'input-group form-control','placeholder':'Clave'}),
 								label='Clave')

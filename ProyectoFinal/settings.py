@@ -26,7 +26,7 @@ SECRET_KEY = 'd#fm=)sbrfai@s##^o2+y*6ug47@$r#^wa-*s@4qkgz=646-#j'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = []#'192.168.1.16']
 
 
 # Application definition
@@ -39,16 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.modelo',
-    'apps.archivo',
-    'apps.carrera',
-    'apps.ciclo',
     'apps.cuenta',
-    'apps.docente',
     'apps.mallaCurricular',
-    'apps.materia',
     'apps.periodoAcademico',
     'apps.persona',
-    'apps.rol',
     'apps.seguimiento',
     'apps.silabo',
     'apps.tramite',
@@ -79,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -120,8 +115,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#AUTHENTICATION_BACKENDS = ('apps.cuenta.backends.EmailAuthBackend',)
 
-LOGIN_URL = reverse_lazy('autenticar') #autenticar es el nombre de una url
+#LOGIN_URL = reverse_lazy('autenticar') #autenticar es el nombre de una url
+LOGOUT_REDIRECT_URL = reverse_lazy('index') #autenticar es el nombre de una url
 
 
 # Internationalization
@@ -142,10 +139,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    #'/var/www/static/',
+STATICFILES_DIRS =[os.path.join(BASE_DIR, 'static'),
+    #'/var/www/static/'
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_DIRS = [os.path.join(BASE_DIR,'static')]
 STATICFILES_DIR = [os.path.join(BASE_DIR, 'static')]

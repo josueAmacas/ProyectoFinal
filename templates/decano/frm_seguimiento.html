@@ -32,29 +32,38 @@
                             </thead>
 
                             <tbody style="text-align: center">
+                                {% for s in seguimiento %}        
                                 <tr>
-                                    <th> </th> 
-
-                                    <th> </th>  
-                                    
+                                    <th>{{forloop.counter}}</th> 
+                                    <th>{{s.tramite.registro}}</th>  
+                                    {% if s.revSolicitud %}
                                     <th  style="background: #FFC312">Revisado</th>
-
-                                     
+                                    {% else %}
                                     <th  style="background: #FE2E2E">En Espera</th>                    
-                                     <th  style="background: #FFC312">Revisado</th>
-
+                                    {% endif %}
+                                    {% if s.revSellos %}
+                                    <th  style="background: #FFC312">Revisado</th>
+                                    {% else %}
                                     <th  style="background: #FE2E2E">En Espera</th>                    
-                                    <th  style="background: #FFC312"> Revisado</th>
-
+                                    {% endif %}
+                                    {% if  s.asigDocente %}
+                                    <th  style="background: #FFC312">{{s.tramite.docente}}</th>
+                                    {% else %}
                                     <th  style="background: #FE2E2E">No Asignado</th>                    
+                                    {% endif %}
+                                    {% if  s.revDocumentacion %}
                                     <th  style="background: #FFC312">Revisado</th>
-
+                                    {% else %}
                                     <th  style="background: #FE2E2E">En Espera</th>                    
+                                    {% endif %}
+                                    {% if  s.tramite.estado %}
                                     <th  style="background: #FFC312">Aceptado</th>
-
+                                    {% else %}
                                     <th  style="background: #FE2E2E">No Admitido</th>                    
-                                    
-                                </tr>
+                                    {% endif %}
+
+                                    </tr>                       
+                                {% endfor %}
                                 
                             </tbody>
 

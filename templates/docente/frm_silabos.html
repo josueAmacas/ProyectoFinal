@@ -73,7 +73,7 @@
                         <a class="navbar-brand text-brand" href="#" style="font-size: 40px">Lista d<span class="color-b">e Silabos</span></a>
                         <br>                           
                     </center>
-                    <a onclick="" class="btn btn-success  "  href="#"  style="background: #FFC312;width: 100%" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Agregar Silabo Academico</span></a>
+                    <a onclick="" class="btn btn-success "  href="#"  style="background: #FFC312;width: 100%" data-placement="top" data-toggle="modal" data-target="#Form" title="Agregar" ><span class="glyphicon glyphicon-pencil">Agregar Silabo Academico</span></a>
                     <br>
                     <table  class="table table-hover table-responsive" id="tabla" style="font-size: 100%">
 
@@ -167,31 +167,22 @@
                 </div>
             </center>
             <div class="modal-body">
-                <form enctype = "multipart/form-data" action="/guardar/silabos/" id="estado" method="POST">
+                <form enctype = "multipart/form-data" id="estado" method="POST">{% csrf_token %}
 
                     <div class="form-group">
                         <label for="usuario">Periodo Academico:</label>
-                        <select class="form-control" id="perido" name="periodo">
-                           
-                            <option value="{{periodo.id}}">Desde:   Hasta:  </option>
-                           
-                        </select>
+                        {{form.periodoAcademico}}
                     </div>
                     <div class="form-group">
                         <label for="estado">Materia:</label>
-                        <select class="form-control" id="materia" name="materia" >
-                             
-                            <option value="{{materia.id}}"> </option>
-                             
-                        </select>
+                        {{form.materia}}
 
                     </div>
 
                     <div class="form-group">
                         <label for="archivo">Archivo:</label>
                         <div class="input-group">
-                            <input type="file" class="custom-file-input" id="archivo" name="archivo" >
-                            <label class="custom-file-label" >Elegir Archivo Formato Tipo .pdf</label>
+                            {{form.archivo}}
                         </div>
                     </div>
 

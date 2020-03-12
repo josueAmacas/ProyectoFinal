@@ -58,17 +58,17 @@
                             <tr>
                                 <td> {{forloop.counter}} </td>
                                 <td>  
-                                    <a href="{% static 'images/gallery/sin_foto.jpg' %}" target="_blank"> <img class = "rounded" src = "{% static 'images/gallery/' %}{{u.persona.foto}}" width = "40" /> </a>
+                                    <a href="{{u.foto.url}}" target="_blank"> <img class = "rounded" src = "{{u.foto.url}}" width = "40" /> </a>
                                 </td>
-                                <td> {{u.persona.nombres}} {{u.persona.apellidos}} </td>
-                                <td> {{u.persona.cedula}} </td>
-                                <td> {{u.persona.fechaNacimiento}} </td> 
-                                <td> {{u.persona.edad}} </td> 
-                                <td><a id="a{{forloop.counter}}"  class="btn btn-success col-md-12 " href="#"  style="margin-left: 5%;background: #2eca6a" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">{{u.persona.rol.nombre}}</span></a>
-                                <td> {{u.persona.telefono}} </td> 
-                                <td> {{u.correo}} </td> 
-                                <td> {{u.persona.direccion}} </td> 
-                                {% if u.estado %}
+                                <td> {{u.first_name}} {{u.last_name}} </td>
+                                <td> {{u.cedula}} </td>
+                                <td> {{u.fechaNacimiento}} </td> 
+                                <td> {{u.edad}} </td> 
+                                <td><a id="a{{forloop.counter}}"  class="btn btn-success col-md-12 " href="#"  style="margin-left: 5%;background: #2eca6a" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">{{u.rol}}</span></a>
+                                <td> {{u.telefono}} </td> 
+                                <td> {{u.email}} </td> 
+                                <td> {{u.direccion}} </td> 
+                                {% if u.is_active %}
                                 <td><a id="{{forloop.counter}}"  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Activo</span></a>
                                 {% else %}     
                                 <td><a id="{{forloop.counter}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactivo</span></a>
@@ -77,14 +77,14 @@
                         <script>
 
                             $("#{{forloop.counter}}").click(function () {
-                                $("#usuario").val("{{u.persona.nombres}} {{u.persona.apellidos}}");
-                                $("#estado").val("{{u.estado}}");
-                                $("#externalC").val("{{u.external_id}}");
+                                $("#usuario").val("{{u.first_name}} {{u.last_name}}");
+                                $("#estado").val("{{u.is_active}}");
+                                $("#externalC").val("{{u.persona_id}}");
                             });
                             $("#a{{forloop.counter}}").click(function () {
-                                $("#usuarioR").val("{{u.persona.nombres}} {{u.persona.apellidos}}");
-                                $("#id_rol").val("{{u.persona.rol_id}}")
-                                $("#externalR").val("{{u.persona.external_id}}");
+                                $("#usuarioR").val("{{u.first_name}} {{u.last_name}}");
+                                $("#id_rol").val("{{u.rol_id}}")
+                                $("#externalR").val("{{u.persona_id}}");
 
                             });
 
@@ -152,7 +152,7 @@
                 </div>
             </center>
             <div class="modal-body">
-                <form action="/estado/cuenta" id="estado" method="POST">
+                <form  id="estado" method="POST">
 
                     <input type="hidden"  id="externalC" name="externalC"/>
                     <div class="form-group">

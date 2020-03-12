@@ -10,37 +10,11 @@
         padding: 0;
         overflow: hidden;
     }
-
 </style>
-<script>
-
-    function PDF(txt, area, carrera, anio, estado) {
-        var html = '<center>';
-        html += '       <a class="navbar-brand text-brand " href="#" style="font-size: 150%">' + area + '</a>';
-        html += '        <br>';
-        html += '        <a class="navbar-brand text-brand" href="#" style="font-size: 100%">Carrera de ' + carrera + '</a>';
-        html += '        <br>';
-        html += '        <a class="navbar-brand text-brand" href="#" style="font-size: 90%">Malla <span class="color-b"> Curricular ' + anio + '</span></a>';
-        html += '        <br>';
-        if (estado === "True") {
-            html += '        <td><a  class="btn btn-success "  href="#"  style="background: #26a356;width: 100%"><span class="glyphicon glyphicon-pencil">Activa</span></a>';
-
-        } else {
-            html += '        <td><a class="btn btn-success "  href="#"  style="background: #FE2E2E;width: 100%"><span class="glyphicon glyphicon-pencil">Inactiva</span></a>';
-        }
-        html += '    </center>';
-        html += '    <div class="embed-responsive" style="padding-bottom:70%">';
-        html += '        <object data="{% static "upload/mallas/" %}' + txt + '" type="application/pdf" width="100%" height="100%"></object>';
-        html += '</div>';
-        $("#pdf").html(html);
-    }
-
-</script>
 
 <div class="card" >
 
     <div class="card-header"  style="background: #bbb">
-
 
         <div class="row">
 
@@ -73,7 +47,7 @@
                         </thead>    
 
                         <tbody style="text-align: center">
-                            {% for m in lista %}
+                            {% for m in malla %}
                             <tr>
                                 <td>{{m.mallaCurricular_id}}</td>
 
@@ -92,9 +66,9 @@
 
                         <script>
 
-                            $("#b{{m.mallaCurricular_id}}").click(function () {
+                            /*$("#b{{m.mallaCurricular_id}}").click(function () {
                                 PDF("{{m.archivo}}", "{{m.carrera.area}}", "{{m.carrera.nombre}}", "{{m.anio}}", "{{m.estado}}");
-                            });
+                            });/*/
 
                         </script>
 
@@ -123,7 +97,22 @@
                 <div class="card-header " style="background: #bbb">
                     <a type="button" class="btn btn-danger col-md-12" href="/mallaCurricular/mallaDecano">Cerrar</a>
 
-                    <div class="" style="background: #e5e5e5" id="pdf">           
+                    <div class="" style="background: #e5e5e5" id="pdf">  
+
+                        <center>
+                            <a class="navbar-brand text-brand " href="#" style="font-size: 200%">{{m.carrera.area}}</a><br>
+                            <a class="navbar-brand text-brand" href="#" style="font-size: 150%">Carrera de {{m.carrera.nombre}}</a><br>
+                            <a class="navbar-brand text-brand" href="#" style="font-size: 100%">Malla <span class="color-b"> Curricular {{m.anio}}</span></a><br>
+                            {% if m.estado %}
+                                <td><a  class="btn btn-success "  href="#"  style="background: #26a356;width: 100%"><span class="glyphicon glyphicon-pencil">Activa</span></a>
+                            {% else %}
+                                <td><a class="btn btn-success "  href="#"  style="background: #FE2E2E;width: 100%"><span class="glyphicon glyphicon-pencil">Inactiva</span></a>
+                            {% endif %}
+                        </center>
+                        
+                        <div class='embed-responsive' style='padding-bottom:70%'>
+                            <object  id="pdf" name="pdf" data='{{m.archivo.url}}' type='application/pdf' width='100%' height='100%'></object>
+                        </div>     
 
                     </div>
                 </div>  

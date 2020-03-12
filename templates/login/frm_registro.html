@@ -65,11 +65,13 @@
                     required: true
                 },
                 telefono: {
-                    required: true
+                    required: true,
+                    number:true
                 },
                 direccion: {
                     required: true,
-                    maxlength: 255
+                    maxlength: 255,
+                    soloLetras:true
                 },
                 email: {
                     required: true
@@ -84,35 +86,6 @@
     $(document).ready(function () {
 
         $('select option[value="4"]').attr('selected', true);
-        /*$('#id_apellidos').attr('readonly', true);
-        $('#id_nombres').attr('readonly', true);
-        $('#id_fechaNacimiento').attr('readonly', true);
-        $('#id_telefono').attr('readonly', true);
-        $('#id_direccion').attr('readonly', true);
-        $('#id_correo').attr('readonly', true);
-        $('#id_clave').attr('readonly', true);
-        $("#id_cedula").keyup(function () {
-            var txt = $("#id_cedula").val();
-            if (txt.length === 10) {
-                cedula(txt);
-            } else {
-                $('#id_apellidos').attr('readonly', true);
-                $('#id_nombres').attr('readonly', true);
-                $('#id_fechaNacimiento').attr('readonly', true);
-                $('#id_telefono').attr('readonly', true);
-                $('#id_direccion').attr('readonly', true);
-                $('#id_correo').attr('readonly', true);
-                $('#id_clave').attr('readonly', true);
-
-                $('#aid_pellidos').val("");
-                $('#id_nombres').val("");
-                $('#id_fechaNacimiento').val("");
-                $('#id_telefono').val("");
-                $('#id_direccion').val("");
-                $('#id_correo').val("");
-                $('#id_clave').val("");
-            }
-        });*/
     });
 </script>
 
@@ -120,7 +93,13 @@
     <div class="card">
 
         <center>
-            <div id="mensaje"></div>
+            {% if messages %}
+                {% for  m in messages %}
+                    <center>
+                        <label style="background: #FE2E2E">{{m}}</label>
+                    </center>
+                {% endfor %}
+            {% endif %}
             <div class="card-header">
                 <h3>Registro usuario</h3> 
             </div>  
@@ -218,7 +197,7 @@
         </div>
         <div class="card-footer">
             <div class="d-flex justify-content-center links">
-                Ya tengo cuenta?<a href="/login"  style="color: #FFC312">Iniciar</a>
+                Ya tengo cuenta?<a href="/"  style="color: #FFC312">Iniciar</a>
             </div>
         </div>
     </div>

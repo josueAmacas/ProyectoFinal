@@ -19,43 +19,11 @@
         });
     });
 
-    function cargarMalla() {
-        $.ajax({
-            url: '/lista/periodo/malla/',
-            type: 'GET',
-            dataType: 'JSON',
-            success: function (data, textStatus, jqXHR) {
-
-                var html = "<option disabled selected>Selecciona una opción</option>";
-                $.each(data, function (i, item) {
-                    html += "<option value='" + item.external_id + "'>" + item.anio + "</option>";
-                });
-                $("#malla").html(html);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText);
-            }
-        });
-    }
     function borrar() {
-        $("#fecha_inicio").val("");
-        $("#fecha_fin").val("");
-        $("#malla").val("");
-        $("#external").val("0");
+       $("#id_fechaInicio").val("");
+       $("#id_fechaFin").val("");
+       $("#id_mallaCurricular").val("");
     }
-
-    function PDF(txt) {
-        var html = '<div class="container "  >';
-        html += '<div class="embed-responsive  embed-responsive-4by3">';
-        html += ' <iframe class="embed-responsive-item " src="/upload/mallas/' + txt + '"  ></iframe>';
-        html += '</div>';
-        html += '</div>';
-        $("#pdf").html(html);
-    }
-
-    $(document).ready(function () {
-        cargarMalla();
-    });
 
 </script>
 
@@ -99,31 +67,27 @@
                                     <td>N°- {{forloop.counter}} </td>
                                     <td> {{p.fechaInicio}} </td>
                                     <td> {{p.fechaFin}} </td>
-                                    <td> {{malla.anio}} </td>
+                                    <td> {{p.mallaCurricular.anio}} </td>
                                     <td> <a  id="b{{forloop.counter}}" data-toggle="modal" data-target="#pdf"><img class = "rounded" src = "{% static 'images/icons/pdf.jpg' %}" width = "40" /></a></td>
                                     {% if p.estado %}
-                                    <td><a id="a{{forloop.counter}}"  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Activo</span></a>
+                                    <td><a id="a{{forloop.counter}}"  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="" title="Editar" ><span class="glyphicon glyphicon-pencil">Activo</span></a>
                                     {% else %}       
-                                    <td><a id="a{{forloop.counter}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactivo</span></a>
+                                    <td><a id="a{{forloop.counter}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="" title="Editar" ><span class="glyphicon glyphicon-pencil">Inactivo</span></a>
                                     {% endif %}    
-                                    <td><a id="{{forloop.counter}}" class="btn btn-success  "  href="#"  style="background: #FFC312;width: 100%" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Editar</span></a></td>
+                                    
+                                    <td><a id="{{forloop.counter}}" class="btn btn-success"  href="#"  style="background: #FFC312;width: 100%" data-placement="top" data-toggle="modal" data-target="" title="Editar" ><span class="glyphicon glyphicon-pencil">Editar</span></a></td>
                                 </tr>
                             <script>
-
-                                $("#{{forloop.counter}}").click(function () {
-                                    $("#fecha_inicio").val("{{p.fechaInicio}}");
-                                    $("#fecha_fin").val("{{p.fechaFin}}");
-                                    $("#malla").val("{{p.external_malla}}");
-                                    $("#external").val("{{p.external_id}}");
-                                });
                                 $("#a{{forloop.counter}}").click(function () {
-                                    $("#externalE").val("{{p.external_id}}");
-                                    $("#estado").val("{{p.estado}}");
+                                    $("#id_mallaCurricular").val("{{p.mallaCurricular.mallaCurricular_id}}");
+                                    var sel = '{{p.estado}}';
+                                    if( sel == 'True'){
+                                        $("#id_estado").prop('checked',true);
+                                    }else{
+                                        $("#id_estado").prop('checked',false);
+                                    }
                                 });
-                                $("#b{{forloop.counter}}").click(function () {
-                                    PDF("{{p.archivo}}");
-                                });
-
+                                
                             </script>
                             {% endfor %}
                             </tbody>
@@ -139,7 +103,7 @@
     </div>  
 </div> 
 
-<!-- Modal Editar Estado -->
+
 <div id="Form" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
@@ -151,61 +115,21 @@
                 </div>
             </center>
             <div class="modal-body">
-                <form action="/guardar/periodo" id="estado" name="estado" method="POST">
+                <form  id="estado" name="estado" method="POST">
+                    {% csrf_token %}
 
-                    <input type="hidden" value="0" id="external" name="external"/>
                     <div class="form-group">
                         <label for="usuario">Malla Curricular:</label>
-                        <select class="form-control" id="malla" name="malla">
-
-                        </select>
+                        {{frmP.mallaCurricular}}
                     </div>
                     <div class="form-group">
                         <label for="estado">Fecha de Inicio:</label>
-                        <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"  >
-
+                        {{frmP.fechaInicio}}
                     </div>
 
                     <div class="form-group">
                         <label for="usuario">Fecha de Terminacion:</label>
-                        <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" >
-                    </div>
-
-
-                    <div class="modal-footer col-md-12"> 
-                        <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>
-                        <button type="button" class="btn btn-danger col-md-6"  data-dismiss="modal">Cerrar</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-
-    </div>
-</div>
-<!-- Modal Editar Estado -->
-<div id="Form2" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <center>
-                <div class="modal-header" >
-
-                    <h2 class="modal-title" style="margin-left: 20%">Estado de Periodo</h2> 
-                </div>
-            </center>
-            <div class="modal-body">
-                <form action="/bloquear/periodo" id="estado" method="POST">
-
-                    <input type="hidden"  id="externalE" name="externalE"/>
-
-                    <div class="form-group">
-                        <label for="estado">Estado:</label>
-                        <select type="text" class="form-control" id="estado"  name="estado">
-                            <option value="true">Ativo</option> 
-                            <option value="false">Inactivo</option>
-                        </select>
+                        {{frmP.fechaFin}}
                     </div>
 
                     <div class="modal-footer col-md-12"> 
@@ -223,7 +147,35 @@
 <div id="pdf" class="modal fade" role="dialog">
     <div class="modal-body" id="pdf" >
 
-        <!-- Modal content-->
+      <div class="modal-content">
+
+            <div class="card" >
+                <div class="card-header " style="background: #bbb">
+                    <a type="button" class="btn btn-danger col-md-12" href="/periodoAcademico">Cerrar</a>
+
+                    <div class="" style="background: #e5e5e5" id="pdf">  
+
+                        <center>
+                            <a class="navbar-brand text-brand " href="#" style="font-size: 200%">{{malla.carrera.area}}</a><br>
+                            <a class="navbar-brand text-brand" href="#" style="font-size: 150%">Carrera de {{malla.carrera.nombre}}</a><br>
+                            <a class="navbar-brand text-brand" href="#" style="font-size: 100%">Malla <span class="color-b"> Curricular {{malla.anio}}</span></a><br>
+                            {% if malla.estado %}
+                                <td><a  class="btn btn-success "  href="#"  style="background: #26a356;width: 100%"><span class="glyphicon glyphicon-pencil">Activa</span></a>
+                            {% else %}
+                                <td><a class="btn btn-success "  href="#"  style="background: #FE2E2E;width: 100%"><span class="glyphicon glyphicon-pencil">Inactiva</span></a>
+                            {% endif %}
+                        </center>
+                        
+                        <div class='embed-responsive' style='padding-bottom:70%'>
+                            <object  id="pdf" name="pdf" data='{{malla.archivo.url}}' type='application/pdf' width='100%' height='100%'></object>
+                        </div>     
+
+                    </div>
+                </div>  
+
+            </div> 
+
+        </div>
 
     </div>
 </div>

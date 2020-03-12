@@ -43,49 +43,51 @@
                         </thead>
 
                         <tbody style="text-align: center">
-                            
+                            {% for t in tramite %}
                             <tr>
-                                <td>{{i}}</td>
+                                <td>{{forloop.counter}}</td>
                                 <td>  
 
-                                    <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{Tramite.foto}}" width = "40" /> </a>
+                                    <a href="{{t.tramite.persona.foto.url}}" target="_blank"> <img class = "rounded" src = "{{t.tramite.persona.foto.url}}" width = "40" /> </a>
 
                                 </td>
-                                <td> </td> 
-                                <td> </td> 
-                                <td> </td>
+                                <td>{{t.tramite.persona.first_name}} {{t.tramite.persona.last_name}}</td> 
+                                <td>{{t.tramite.registro}} </td> 
+                                <td>{{t.tramite.tipo}} </td>
 
-                                <td> </td> 
-                                <td>  <a href="/upload/archivos/{{Tramite.archivo}}"> <img class = "rounded" src = "/images/icons/archivo.png" width = "40" /> </a></td>
-                                <td>  <a href="/upload/informesContenido/{{Tramite.informe}}"> <img class = "rounded" src = "/images/icons/pdf.jpg" width = "40" /> </a></td>
+                                <td>{{t.tramite.carrera}} </td> 
+                                <td>  <a href="{{t.archivo.archivo.url}}"> <img class = "rounded" src = "{% static 'images/icons/archivo.png' %}" width = "40" /> </a></td>
+                                <td>  <a href="{{t.archivo.informePeticionario.url}}"> <img class = "rounded" src = "{% static  'images/icons/pdf.jpg' %}" width = "40" /> </a></td>
 
-                                 
-                                <td><a id="{{i}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Aceptado</span></a>
-
-                                     
-                                <td><a id="{{i}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">En Espera</span></a>
-                                     
-                                <td><a id="b{{i}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #04B431" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Editar</span></a>
+                                {% if t.revDocumentacion %}
+                                <td><a id="{{forloop.counter}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">Aceptado</span></a>
+                                {% else %}
+                                <td><a id="{{forloop.counter}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form" title="Editar" ><span class="glyphicon glyphicon-pencil">En Espera</span></a>
+                                {% endif %}
+                                <td><a id="b{{forloop.counter}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #04B431" data-placement="top" data-toggle="modal" data-target="#Form2" title="Editar" ><span class="glyphicon glyphicon-pencil">Editar</span></a>
 
                             </tr>
 
                         <script>
 
-                            $("#{{i}}").click(function () {
-                                $("#externalS").val("{{Tramite.external_idS}}");
-                                $("#registro1").val("{{Tramite.registro}}");
-                                $("#estado").val("{{Tramite.estado}}");
+                            $("#{{forloop.counter}}").click(function () {
+                                $("#id_tramite").val("{{t.tramite.tramite_id}}");
+                                $("#registro1").val("{{t.tramite.registro}}");
+                                var sel = '{{t.revDocumentacion}}';
+                                if( sel == 'True'){
+                                    $("#id_revDocumentacion").prop('checked',true);
+                               }else{
+                                    $("#id_revDocumentacion").prop('checked',false);
+                               }
                             });
-                            $("#b{{i}}").click(function () {
 
-                                $("#externalA").val("{{Tramite.external_idA}}");
-                                $("#registro").val("{{Tramite.registro}}");
+                            $("#b{{forloop.counter}}").click(function () {
+                                $("#id_registro").val("{{t.tramite.registro}}");
 
                             });
-
                         </script>
 
-
+                        {% endfor %}
                         </tbody>
 
                     </table>
@@ -111,18 +113,16 @@
                 </div>
             </center>
             <div class="modal-body">
-                <form enctype = "multipart/form-data"  action="/revision/contenido"  method="POST">
-                    <input type="hidden" class="form-control"  value="0" id="externalA" name="externalA"  readonly>
-
+                <form enctype = "multipart/form-data" method="POST">
+                    {% csrf_token %}
 
                     <div class="form-group">
                         <label for="usuario">Tramite:</label>
-                        <input type="text" class="form-control"   id="registro"   readonly>
+                        {{frmT.registro}}
                     </div>
                     <label for="archivo">Archivo:</label>
                     <div class="input-group">
-                        <input type="file" class="custom-file-input" id="archivo" name="archivo" >
-                        <label class="custom-file-label" >Elegir Archivo Formato Tipo .pdf</label>
+                        {{frmInf.informePeticionario}}
                     </div>
                     <div class="modal-footer col-md-12"> 
                         <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>
@@ -147,20 +147,16 @@
                 </div>
             </center>
             <div class="modal-body">
-                <form  action="/revision/estado"  method="POST">
-
-                    <input type="hidden" class="form-control"  value="0" id="externalS" name="externalS"  readonly>
-
+                <form method="POST">
+                    {% csrf_token %}
+                    {{frmDoc.tramite}}
                     <div class="form-group">
                         <label for="usuario">Tramite:</label>
                         <input type="text" class="form-control"   id="registro1"   readonly>
                     </div>
                     <div class="form-group">
                         <label for="estado">Estado:</label>
-                        <select class="form-control" id="estado" name="estado">
-                            <option value="true">Aceptado</option>
-                            <option value="false">En Espera</option>
-                        </select>
+                        {{frmDoc.revDocumentacion}}
                     </div>
                     <div class="modal-footer col-md-12"> 
                         <button type="submit" class="btn btn-success col-md-6 " >Guardar</button>

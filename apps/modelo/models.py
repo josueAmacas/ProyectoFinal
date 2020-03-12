@@ -11,13 +11,16 @@ class Carrera(models.Model):
 
 class MallaCurricular(models.Model):
 	mallaCurricular_id = models.AutoField(primary_key = True)
-	archivo = models.CharField(max_length=200, null= False)
+	archivo = models.FileField(upload_to='mallas', null= False)
 	anio =  models.CharField(max_length = 5, null = False)
 	estado = models.BooleanField(default =True)
 	carrera = models.ForeignKey(
 		'Carrera', 
 		on_delete = models.CASCADE,
 	)
+
+	def __str__(self):
+		return '{}{}'.format("Malla Curricular  ",self.anio)
 
 class Ciclo(models.Model):
 	ciclo_id = models.AutoField(primary_key = True)
@@ -40,11 +43,20 @@ class Materia(models.Model):
 		on_delete = models.CASCADE,
 	)
 
+	def __str__(self):
+		return '{}'.format(self.nombre)
+
 class PeriodoAcademico(models.Model):
 	periodoAcademico_id = models.AutoField(primary_key = True)
 	fechaInicio = models.DateField(auto_now = False, auto_now_add = False, null = False)
 	fechaFin = models.DateField(auto_now = False, auto_now_add = False, null = False)
 	estado = models.BooleanField(default =True)
+	mallaCurricular = models.ForeignKey(
+		'MallaCurricular', 
+		on_delete = models.CASCADE,
+	)
+	def __str__(self):
+		return '{}{}{}'.format(self.fechaInicio,"  -  ",self.fechaFin)
 
 class Rol(models.Model):
 	listaRol =(
@@ -66,7 +78,7 @@ class Persona(AbstractUser):
 	fechaNacimiento =  models.DateField(auto_now = False, auto_now_add = False, null = True)
 	direccion = models.TextField(max_length=200, default= 'sin direccion')
 	telefono = models.CharField(max_length=13)
-	foto = models.CharField(max_length=200)
+	foto = models.ImageField(upload_to = "gallery", null = True)
 	isDecano = models.BooleanField(default = False)
 	isDocente = models.BooleanField(default = False)
 	isEstudiante = models.BooleanField(default = True)
@@ -77,21 +89,27 @@ class Persona(AbstractUser):
 	)
 	
 	def __str__(self):
-		return '{}{}'.format(self.first_name, self.last_name)
+		return '{}{}{}'.format(self.first_name,"   ", self.last_name)
 
 class Docente(models.Model):
 	docente_id = models.AutoField(primary_key = True)
 	titulo = models.CharField(max_length=200, null=False)
-	carrera = models.CharField(max_length=200, null=False)
 	persona = models.ForeignKey(
 		'Persona', 
 		on_delete = models.CASCADE,
 	)
+	carrera = models.ForeignKey(
+		'Carrera', 
+		on_delete = models.CASCADE,
+	)
+
+	def __str__(self):
+		return '{}{}{}'.format(self.persona.first_name,"   ",self.persona.last_name)
 
 class Silabo(models.Model):
 	Silabo_id = models.AutoField(primary_key = True)
 	estado = models.BooleanField(default =True)
-	archivo = models.CharField(max_length = 200, null = False)
+	archivo = models.FileField(upload_to='silabos', null = False)
 	docente = models.ForeignKey(
 		'Docente', 
 		on_delete = models.CASCADE,
@@ -105,20 +123,24 @@ class Silabo(models.Model):
 		on_delete = models.CASCADE,
 	)
 
+	def __str__(self):
+		return '{}{}{}'.format("Silabo de: ","   ",self.materia.nombre)	
+
 class Archivo(models.Model):
 	archivo_id = models.AutoField(primary_key = True)
-	archivo = models.CharField(max_length = 200, null = False)
-	informePeticionario = models.CharField(max_length = 200, null = False)
+	archivo = models.FileField(upload_to= 'archivos', null = False)
+	informePeticionario = models.FileField(upload_to='informes', null = True)
 	def __str__(self):
-		return '{}'.format(self.informePeticionario)
+		return '{}{}'.format("Archivo ",self.archivo_id)
 
 class Tramite(models.Model):
+	tipo =(
+		('Homologacion', 'Homologacion'),
+	)
 	tramite_id = models.AutoField(primary_key = True)
 	registro = models.CharField(max_length = 200, null = False)
 	estado = models.BooleanField(default =False)
-	external_docente = models.CharField(max_length = 200, null = False)
-	external_carrera = models.CharField(max_length = 200, null = False)
-	tipo = models.CharField(max_length = 200, null = False)
+	tipo = models.CharField(max_length = 200,choices=tipo, null = False)
 	carrera = models.ForeignKey(
 		'Carrera',
 		on_delete = models.CASCADE,
@@ -136,6 +158,9 @@ class Tramite(models.Model):
 		on_delete = models.CASCADE,
 	)
 
+	def __str__(self):
+		return '{}'.format(self.registro)
+
 class Seguimiento(models.Model):
 	seguimiento_id = models.AutoField(primary_key = True)
 	revSolicitud = models.BooleanField(default =False)
@@ -146,3 +171,5 @@ class Seguimiento(models.Model):
 		'Tramite', 
 		on_delete = models.CASCADE,
 	)
+	def __str__(self):
+		return '{}{}'.format("Seguimiento del tramite   ", self.tramite)

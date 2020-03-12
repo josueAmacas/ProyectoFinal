@@ -2,40 +2,6 @@
 {% load static %}
 {% block titulo %}Sistema Homologacion{% endblock %}
 {% block content %}
-<script>
-    function cargarDocente(txt) {
-        $.ajax({
-            url: '/cargar/docente/API2/' + txt,
-            type: 'GET',
-            dataType: 'JSON',
-            success: function (data, textStatus, jqXHR) {
-                var html = "";
-                html += ' <center><img class = "rounded" src = "/images/gallery/' + data.persona.foto + '" width = "90" /></center> <br>';
-                html += ' <label>Docente:</label>';
-                html += ' <input type="text" class="form-control" id="cedula"  value="' + data.persona.nombres + " " + data.persona.apellidos + '" readonly/>';
-                html += ' <label>Titulo:</label>';
-                html += ' <input type="text" value="' + data.titulo + '" class="form-control" id="titulo"  name="titulo" readonly/>';
-                html += ' <input type="hidden" value="' + data.external_id + '" class="form-control" id="externalD"  name="externalD" readonly/>';
-                $("#docente").html(html);
-
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText);
-            }
-        });
-    }
-    $(document).ready(function () {
-
-        $("#cedula").keyup(function () {
-            var txt = $("#cedula").val();
-            if (txt.length === 10) {
-                cargarDocente(txt);
-            } else {
-                $("#docente").html("");
-            }
-        });
-    });
-</script>
 <div class="card" >
     <div class="card-header"  style="background: #bbb">
         <div class="row">
@@ -72,47 +38,42 @@
                         </thead>
 
                         <tbody style="text-align: center">
-
-                            
+                            {% for s in seguimiento %}                            
                             <tr>
-                                <td> </td>
+                                <td>{{forloop.counter}}</td>
                                 <td>  
-
-                                    <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{Asignacion.foto}}" width = "40" /> </a>
-
+                                    <a href="{{s.tramite.persona.foto.url}}" target="_blank"> <img class = "rounded" src = "{{s.tramite.persona.foto.url}}" width = "40" /> </a>
                                 </td>
-                                <td> </td> 
-                                <td> </td> 
-                                <td> </td>
-                                <td> /td>
+                                <td>{{s.tramite.persona.first_name}} {{s.tramite.persona.last_name}} </td> 
+                                <td>{{s.tramite.persona.cedula}}</td> 
+                                <td>{{s.tramite.registro}}</td>
+                                <td>{{s.tramite.tipo}}</td>
 
-                                <td> </td> 
-                                <td> <a   href="/upload/archivos/{{Asignacion.archivo}}"> <img class = "rounded" src = "/images/icons/archivo.png" width = "40" /> </a></td>
-                                 
-                                <td><a  id="{{i}}"  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">{{Asignacion.docente}}</span></a>
-
-                                 
-                                <td><a  id="{{i}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">En espera</span></a>
-                                     
+                                <td>{{s.tramite.carrera}} </td> 
+                                <td> <a   href="{{s.tramite.archivo.archivo.url}}"> <img class = "rounded" src = "{% static 'images/icons/archivo.png'%}" width = "40" /> </a></td>
+                                 {% if s.asigDocente %}
+                                <td><a  id="{{forloop.counter}}"  class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">{{s.tramite.docente}}</span></a>
+                                 {% else %}
+                                <td><a  id="{{forloop.counter}}"  class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">En espera</span></a>
+                                {% endif %}
                             </tr>
 
                         <script>
 
-                            $("#{{i}}").click(function () {
-
-                                $("#registro").val("{{Asignacion.registro}}");
-                                $("#estado").val("{{Asignacion.estado}}");
-                                $("#external").val("{{Asignacion.external_id}}");
-                                $("#tramite").val("{{Asignacion.tramite}}");
-                                $("#cedula").val("{{Asignacion.cedula_docente}}");
-                                cargarDocente("{{Asignacion.cedula_docente}}");
-
+                             $("#{{forloop.counter}}").click(function () {
+                                $("#id_tramite").val("{{s.tramite.tramite_id}}");
+                                $("#id_docente").val("{{s.tramite.docente.docente_id}}");
+                                $("#id_registro").val("{{s.tramite.registro}}");
+                                var sel = '{{s.asigDocente}}';
+                                if( sel == 'True'){
+                                    $("#id_asigDocente").prop('checked',true);
+                               }else{
+                                    $("#id_asigDocente").prop('checked',false);
+                               }
                             });
 
                         </script>
-
- 
-
+                        {% endfor %}
                         </tbody>
 
                     </table>
@@ -139,23 +100,20 @@
             </div>
 
             <div class="modal-body">
-                <form action="/asignar/docente" id="consultas" method="POST">
-                    <input type="hidden"  id="tramite" name="tramite"/>
-                    <input type="hidden"  id="external" name="external"/>
+                <form name="consultas" id="consultas" method="POST">
+                    {% csrf_token %}
+                    {{frmA.tramite}}
                     <div class="form-group">
                         <label for="usuario">Tramite:</label>
-                        <input type="text" class="form-control" id="registro"  readonly="">
+                        {{frmD.registro}}
                     </div>
                     <div class="form-group">
                         <label for="estado">Estado:</label>
-                        <select  class="form-control" id="estado"  name="estado">
-                            <option value="true">Asignar</option> 
-                            <option value="false">En espera</option>
-                        </select>
+                        {{frmA.asigDocente}}
                     </div>
                     <div class="form-group" id="CD" >
                         <label for='cedula'>Ingrese cedula del docente:</label>
-                        <input type='text' class='form-control' id='cedula' name='cedula' >
+                        {{frmD.docente}}
                     </div>
                     <div class="form-group" id="docente" >
                     </div>

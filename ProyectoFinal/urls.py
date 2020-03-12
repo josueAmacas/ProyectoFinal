@@ -16,18 +16,26 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
+from . import settings
+from django.contrib.staticfiles.urls import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 from django.urls import path
+from django.contrib.auth.views import logout_then_login
 from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.homePage),
-    path('login/', include('apps.cuenta.urls')),
+    path('admin/', admin.site.urls),    
+    path('', views.homePage, name='index'),
+    path('accounts/login/', include('apps.cuenta.urls')),
     path('personas/', include('apps.persona.urls')),
     path('mallaCurricular/', include('apps.mallaCurricular.urls')),
     path('tramite/', include('apps.tramite.urls')),
     path('seguimiento/', include('apps.seguimiento.urls')), 
     path('periodoAcademico/', include('apps.periodoAcademico.urls')),
     path('silabo/', include('apps.silabo.urls')),
+    path('logout/', logout_then_login, name = 'logout'),
 ]
+                         
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -29,7 +29,7 @@
                             {% for s in seguimiento %}        
                             <tr>
                                 <th>{{forloop.counter}}</th> 
-                                <th>{{s.registro}}</th>  
+                                <th>{{s.tramite.registro}}</th>  
                                 {% if s.revSolicitud %}
                                 <th  style="background: #FFC312">Revisado</th>
                                 {% else %}
@@ -41,7 +41,7 @@
                                 <th  style="background: #FE2E2E">En Espera</th>                    
                                 {% endif %}
                                 {% if  s.asigDocente %}
-                                <th  style="background: #FFC312">{{Seguimiento.docente}}</th>
+                                <th  style="background: #FFC312">{{s.tramite.docente}}</th>
                                 {% else %}
                                 <th  style="background: #FE2E2E">No Asignado</th>                    
                                 {% endif %}
@@ -50,7 +50,7 @@
                                 {% else %}
                                 <th  style="background: #FE2E2E">En Espera</th>                    
                                 {% endif %}
-                                {% if  s.estado %}
+                                {% if  s.tramite.estado %}
                                 <th  style="background: #FFC312">Aceptado</th>
                                 {% else %}
                                 <th  style="background: #FE2E2E">No Admitido</th>                    

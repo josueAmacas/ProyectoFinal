@@ -45,43 +45,43 @@
                             </thead>
 
                             <tbody style="text-align: center">
-
+                                {% for s in seguimiento %}
                               
-                              <tr>
-                                    <td> </td>
-                                    <td>  
-
-                                        <a href="/images/gallery/sin_foto.jpg" target="_blank"> <img class = "rounded" src = "/images/gallery/{{Solicitud.foto}}" width = "40" /> </a>
-
+                                <tr>
+                                    <td>{{forloop.counter}} </td>
+                                    <td>
+                                        <a href="{{s.tramite.persona.foto.url}}" target="_blank"> <img class = "rounded" src = "{{s.tramite.persona.foto.url}}" width = "40" /> </a>
                                     </td>
-                                    <td> </td> 
-                                    <td> </td> 
-                                    <td> </td>
-                                    <td> </td>
+                                    <td>{{s.tramite.persona.first_name}} {{s.tramite.persona.last_name}}</td> 
+                                    <td>{{s.tramite.persona.cedula}}</td> 
+                                    <td>{{s.tramite.registro}} </td>
+                                    <td>{{s.tramite.tipo}} </td>
 
-                                    <td> </td> 
-                                    <td> <a   href="/upload/archivos/{{Solicitud.archivo}}"> <img class = "rounded" src = "/images/icons/archivo.png" width = "40" /> </a></td>
-                                     
-                                    <td><a  id="{{i}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">Sumillada</span></a>
-
-                                       
-                                    <td><a  id="{{i}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">En espera</span></a>
-                                       
+                                    <td>{{s.tramite.carrera}}</td> 
+                                    <td> <a   href="{{s.tramite.archivo.archivo.url}}"> <img class = "rounded" src = "{% static 'images/icons/archivo.png' %}" width = "40" /> </a></td>
+                                     {% if s.revSolicitud %}
+                                    <td><a  id="{{forloop.counter}}" class="btn btn-success col-md-12"  href="#"  style="margin-left: 5%;background: #FFC312" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">Sumillada</span></a>
+                                    {% else %}                                    
+                                    <td><a  id="{{forloop.counter}}" class="btn btn-success col-md-12 "  href="#"  style="margin-left: 5%;background: #FE2E2E" data-placement="top" data-toggle="modal" data-target="#Form2" ><span class="glyphicon glyphicon-pencil">En espera</span></a>
+                                    {% endif %}
                                 </tr>
 
                             <script>
 
-                                $("#{{i}}").click(function () {
-
-                                    $("#usuario").val("{{Solicitud.solicitante}}");
-                                    $("#estado").val("{{Solicitud.estado}}");
-                                    $("#external").val("{{Solicitud.external_id}}");
-
+                                $("#{{forloop.counter}}").click(function () {
+                                    $("#id_tramite").val("{{s.tramite.tramite_id}}");
+                                    $("#usuario").val("{{s.tramite.persona.first_name}}  {{s.tramite.persona.last_name}}");
+                                    var sel = '{{s.revSolicitud}}';
+                                    if( sel == 'True'){
+                                        $("#id_revSolicitud").prop('checked',true);
+                                    }else{
+                                        $("#id_revSolicitud").prop('checked',false);
+                                    }
                                 });
 
                             </script>
 
-                           
+                                {% endfor %}
 
                             </tbody>
 
@@ -109,19 +109,16 @@
             </div>
 
             <div class="modal-body">
-                <form action="/sumillar/solicitudes" id="consultas" method="POST">
-
-                    <input type="hidden"  id="external" name="external"/>
+                <form name="consultas" id="consultas" method="POST">
+                    {% csrf_token %}
+                    {{frmSol.tramite}}
                     <div class="form-group">
                         <label for="usuario">Usuario:</label>
                         <input type="text" class="form-control" id="usuario"  readonly="">
                     </div>
                     <div class="form-group">
                         <label for="estado">Estado:</label>
-                        <select  class="form-control" id="estado"  name="estado">
-                            <option value="true">Sumillada</option> 
-                            <option value="false">En espera</option>
-                        </select>
+                        {{frmSol.revSolicitud}}
                     </div>
 
                     <div class="modal-footer col-md-12"> 
